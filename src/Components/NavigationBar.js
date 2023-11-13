@@ -19,7 +19,8 @@ const NavigationBar = () => {
                     </div>
                 </ul>
                 </li>
-                <li><Link to="/About">about</Link></li>
+                <li><Link to="/About">About</Link></li>
+                <li><Link to="/Signup">Signup</Link></li>
             </ul>
             <input type="search" placeholder="Search what you want"></input>
             {/* <img src={search}></img> */}
