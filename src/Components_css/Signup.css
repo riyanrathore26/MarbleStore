@@ -1,0 +1,91 @@
+/* Add these styles to your existing CSS file or create a new one */
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .signup-container {
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 12px;
+    border: 2px solid #3498db;
+    box-shadow: 0 0 20px rgba(0, 0, 0.5, 0.5);
+    text-align: center;
+    animation: slideIn 0.8s ease-in-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  h2 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #3498db;
+  }
+  
+  input {
+    margin: 5px 0 15px;
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #3498db;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 10px rgba(41, 128, 185, 0.6);
+  }
+  
+  button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 100%;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    animation: pulsate 1.5s infinite;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  @keyframes pulsate {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  

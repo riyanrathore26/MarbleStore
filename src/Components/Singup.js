@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import '../Components_css/Signup.css'
+import NavigationBar from './NavigationBar';
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -27,7 +29,9 @@ const Signup = () => {
     };
 
     return (
-        <div>
+        <>
+        <NavigationBar/>
+        <div className='signup-container'>
             <h2>Signup</h2>
             <label htmlFor="username">Username:</label>
             <input
@@ -60,6 +64,7 @@ const Signup = () => {
                 Signup
             </button>
         </div>
+        </>
     );
 };
 

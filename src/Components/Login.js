@@ -1,4 +1,6 @@
 import React from "react";
+import '../Components_css/Login.css'
+import NavigationBar from "./NavigationBar";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
@@ -38,6 +40,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <NavigationBar/>
     <div className="login-container">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
@@ -57,6 +61,7 @@ const Login = () => {
         {error && <p className="error-message">{error}</p>}
       </form>
     </div>
+    </>
   );
 };
 
