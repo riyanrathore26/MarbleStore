@@ -5,8 +5,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /* height: 100vh; */
     margin: 0;
+    border-radius: 12px;
+    border: 2px solid #3498db;
+    box-shadow: 0 0 20px rgba(0, 0, 0.5, 0.5);
+    text-align: center;
+    animation: slideIn 0.8s ease-in-out;
+    padding: 5%;
   }
   
   /* Styles for AdminPage */
@@ -54,6 +60,7 @@
   button {
     background-color: #27ae60;
     color: #fff;
+    width: 50%;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -119,3 +126,19 @@
     transform: translateY(-5px);
   }
   
+
+  h1{
+    margin-left: 15%;
+    margin-top: 5%;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }

@@ -3,6 +3,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Components_css/NavigationBar.css'
 
+const inline = {
+  marginRight:'3%',
+  width:'30%',
+};
 const NavigationBar = () => {
   return (
             <nav>
@@ -22,7 +26,7 @@ const NavigationBar = () => {
                 <li><Link to="/About">About</Link></li>
                 <li><Link to="/Signup">Signup</Link></li>
             </ul>
-            <input type="search" placeholder="Search what you want"></input>
+            <input type="search" placeholder="Search what you want" style={inline}></input>
             {/* <img src={search}></img> */}
             </nav>
   );

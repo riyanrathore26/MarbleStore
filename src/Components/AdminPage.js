@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../Components_css/AdminPage.css'; // Import the CSS file
+import NavigationBar from '../Components/NavigationBar'
 
 const AdminPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -28,6 +29,8 @@ const AdminPage = () => {
 
   return (
     <>
+    <NavigationBar/>
+    <h1>Add Infomation About Product</h1>
     <div className='Big-container'>
     <div className="container">
       {fileContainers.map((container) => (
@@ -51,16 +54,19 @@ const AdminPage = () => {
       <button onClick={handleAddContainer}> + </button>
     </div>
     <div className='infomation'>
+    <label htmlFor="text">Enter Name:</label>
         <input
         type='text'
         name='text'
         placeholder='Enter Name'
         />
+        <label htmlFor="Description">Enter Description:</label>
         <input
         type='text'
         name='Description'
         placeholder='Enter Description'
         />
+        <label htmlFor="Price">Enter Price:</label>
         <input
         type='number'
         name='Price'
