@@ -1,18 +1,20 @@
 /* Add these styles to your existing CSS file or create a new one */
 
-body {
+/* body {
     font-family: 'Montserrat', sans-serif;
     color: #333;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /* height: 100vh; 
     margin: 0;
-  }
+  } */
   
   .signup-container {
     max-width: 500px;
     padding: 40px;
+    margin-top: 10%;
+    margin-left: 25%;
     border-radius: 12px;
     border: 2px solid #3498db;
     box-shadow: 0 0 20px rgba(0, 0, 0.5, 0.5);
