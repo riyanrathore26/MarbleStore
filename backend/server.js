@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const multer = require('multer'); 
 
 const app = express();
 const port = 5000;
@@ -11,7 +12,48 @@ mongoose.connect('mongodb://localhost:27017/MarbleStore', {
     useUnifiedTopology: true,
 });
 
+const productSchema = new mongoose.Schema({
+    name: String,
+    imagePath: [String], // Allow an array of strings for image paths
+    description: String,
+    price: Number,
+  },{ collection: 'Posts' });
+  
+  
+  const Product = mongoose.model('Product', productSchema);
+  
+  app.use(bodyParser.json());
+  app.use(cors());
+  
+  const storage = multer.memoryStorage();
+  const upload = multer({ storage: storage });
+  
+  app.post('/upload', upload.array('images'), async (req, res) => {
+    try {
+      const { name, description, price } = req.body;
+  
+      // Extract file names or paths from the request
+      const imagePaths = req.files.map(file => file.originalname);
+  
+      const newProduct = new Product({
+        name,
+        imagePath: imagePaths,
+        description,
+        price,
+      });
+  
+      await newProduct.save();
+  
+      res.status(201).send('Product added successfully!');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+
 // Specify the collection name for the User model
+//Schema for Signup Page
 const userSchema = new mongoose.Schema({
     username: String,
     email: String,

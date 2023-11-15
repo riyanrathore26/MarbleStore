@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
+    height: 60vh;
     margin: 0;
     border-radius: 12px;
     border: 2px solid #3498db;
@@ -60,7 +60,7 @@
   button {
     background-color: #27ae60;
     color: #fff;
-    width: 50%;
+    width: 15%;
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
@@ -78,6 +78,7 @@
   .info-container {
     width: 300px;
     padding: 20px;
+    position: absolute;
     border: 2px solid #e74c3c;
     border-radius: 10px;
     background-color: #f8f9fa;
@@ -142,3 +143,8 @@
       opacity: 1;
     }
   }
+
+.Submit_btn{
+  margin-top: 35%;
+  margin-left: 5%;
+}
