@@ -57,7 +57,7 @@
     transform: scale(1.1); /* Enlarge the image on hover */
   }
   
-  button {
+  .submit {
     background-color: #27ae60;
     color: #fff;
     width: 15%;
@@ -70,7 +70,7 @@
     transition: background-color 0.3s;
   }
   
-  button:hover {
+  .submit:hover {
     background-color: #219d54;
   }
   

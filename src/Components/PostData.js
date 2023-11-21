@@ -1,42 +1,58 @@
-import React from "react";
-import '../Components_css/PostData.css'
-import logo from '../logo.svg'
-const PostData = () =>{
-    return (
-        <>
-    <div className="slideshow-container">
-      <div className="mySlides fade post1">
-        <img src={logo} alt='' />
+import React, { useState, useEffect } from 'react';
+import '../Components_css/PostData.css';
+import axios from 'axios';
+
+const PostData = () => {
+  const [products, setProducts] = useState([]);
+  const [indexMap, setIndexMap] = useState({});
+
+  const fun = (productId, direction) => {
+    const currentIndex = indexMap[productId] || 0;
+    let newIndex;
+
+    if (direction === 'next') {
+      // Move forward
+      const maxIndex = products.find(product => product._id === productId)?.images.length - 1;
+      newIndex = currentIndex < maxIndex ? currentIndex + 1 : currentIndex;
+    } else {
+      // Move backward
+      newIndex = currentIndex > 0 ? currentIndex - 1 : currentIndex;
+    }
+
+    // Update the state with the new index for the specific product _id
+    setIndexMap((prevIndexMap) => ({
+      ...prevIndexMap,
+      [productId]: newIndex,
+    }));
+  };
+
+  useEffect(() => {
+    // Fetch data from the backend (replace with your actual backend URL)
+    axios.get('http://localhost:5000/posts')
+      .then(response => {
+        setProducts(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching product data:', error);
+      });
+  }, []); // Empty dependency array to fetch data only once on component mount
+
+  return (
+    <>
+    <div className='try'>
+      {products.map(product => (
+        <div key={product._id} className='Slide-Container'>
+          {/* Use the new index value to change the image */}
+          <img src={`http://localhost:5000/images/${product.images[indexMap[product._id] || 0]}`} alt={product.name} />
+          <h1>Name:-{product.name}</h1>
+          <h1>Price:-{product.price}</h1>
+          <button className='Post-Btn prev' onClick={() => fun(product._id, 'previous')}></button>
+          <button className='Post-Btn next' onClick={() => fun(product._id, 'next')}></button>  
+        </div>
+      ))}
       </div>
-      {/* <div className="mySlides fade post2">
-        <img src={logo} alt='' />
-      </div>
-      <div className="mySlides fade post3">
-        <img src={logo} alt='' />
-      </div> */}
-      {/* <a className="next" >&#10095;</a>
-      <h4 style={{ color: 'black', textAlign: 'start', marginTop: '0%', float: 'left' }}>
-        ''<br /><br /><span>Price:-</span>&#x20b9;
-      </h4> */}
-      {/* <div className="li">
-        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"
-          onClick={() => toggleColor(record.id, record.name)} className="heart read" aria-hidden="true"
-          role="presentation" focusable="false">
-          <path d="m16 28c7-4.733 14-10 14-17 0-1.792-.683-3.583-2.05-4.95-1.367-1.366-3.158-2.05-4.95-2.05-1.791
-        0-3.583.684-4.949 2.05l-2.051 2.051-2.05-2.051c-1.367-1.366-3.158-2.05-4.95-2.05-1.791 0-3.583.684-4.949
-        2.05-1.367 1.367-2.051 3.158-2.051 4.95 0 7 7 12.267 14 17z"></path>
-        </svg>
-        <p>{record.like_count}</p>
-      </div> */}
-      {/* <div className="conn">
-        <form name="f1" method="POST" action="/comment1">
-          <input type="hidden" name="var" value='' />
-          <input type="text" placeholder="add comment" name="comment" id="comment" />
-        </form>
-      </div> */}
-    </div>
-        </>
-    );
+    </>
+  );
 };
 
 export default PostData;

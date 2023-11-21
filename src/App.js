@@ -7,6 +7,7 @@ import Contact from './Components/Contact';
 import Signup from './Components/Singup';
 import Login from './Components/Login';
 import AdminPage from './Components/AdminPage';
+import PostData from './Components/PostData';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/PostData" element={<PostData />} />
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
