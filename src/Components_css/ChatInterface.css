@@ -1,0 +1,27 @@
+/* ChatInterface.css */
+.chat-interface {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+  
+  .header {
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .messages {
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 200px;
+  }
+  
+  /* Add any additional styles as needed */
+  

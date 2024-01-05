@@ -62,7 +62,7 @@
     box-shadow: 0 0 10px rgba(41, 128, 185, 0.6);
   }
   
-  button {
+  .loginBtn {
     background-color: #3498db;
     color: #fff;
     padding: 14px;
@@ -75,7 +75,7 @@
     animation: pulsate 1.5s infinite;
   }
   
-  button:hover {
+  .loginBtn:hover {
     background-color: #2980b9;
   }
   

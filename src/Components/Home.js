@@ -2,6 +2,7 @@
 import React from 'react';
 import NavigationBar from '../Components/NavigationBar'
 import PostData from '../Components/PostData'
+import ChatButton from './ChatButton'
 
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
     <>
     <NavigationBar/>
     <PostData />
+    <ChatButton/>
     </>
   );
 };

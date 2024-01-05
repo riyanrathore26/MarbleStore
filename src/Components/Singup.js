@@ -60,7 +60,7 @@ const Signup = () => {
                 required
             />
             <br />
-            <button type="button" onClick={handleSignup}>
+            <button type="button" onClick={handleSignup} className='loginBtn'>
                 Signup
             </button>
         </div>

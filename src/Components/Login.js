@@ -57,7 +57,7 @@ const Login = () => {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit" className="loginBtn">Login</button>
         {error && <p className="error-message">{error}</p>}
       </form>
     </div>
