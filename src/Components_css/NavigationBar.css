@@ -76,6 +76,12 @@ input {
     font-size: 14px;
 }
 
+.inline{
+    width: 200%;
+    margin-right: 3%;
+    margin-left: -116%;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
     ul {

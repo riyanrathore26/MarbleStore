@@ -1,0 +1,26 @@
+/* Add or update your CSS file with the following styles */
+.SearchComponent {
+    display: flex;
+    flex-direction: column; /* Adjust if you want a different layout */
+  }
+  
+  .history-item {
+    cursor: pointer;
+    transition: color 0.3s ease; /* Add transition for smooth color change */
+  }
+  
+  .history-item:hover {
+    background-color: gray;
+  }
+  
+  .icons-container {
+    display: flex;
+    align-items: center; /* Align items vertically in the icons container */
+  }
+  
+  .icon {
+    cursor: pointer;
+    margin-left: 8px; /* Adjust the margin to your preference */
+    font-size: 18px; /* Adjust the font size to your preference */
+  }
+  

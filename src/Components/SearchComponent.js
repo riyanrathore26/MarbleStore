@@ -1,31 +1,33 @@
-// SearchHistory.js
 import React from 'react';
+import '../Components_css/SearchComponent.css'
 
 const cssstyle = {
-  position: 'absolute', // Use colon instead of semicolon
-  top: 'calc(100% + -25px)', /* Position it below the input */
-  right: 0,
-  width: '32%', /* Make it full width */
-  backgroundColor: '#fff', /* Background color */
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', /* Add shadow for a card-like effect */
+  position: 'absolute',
+  top: 'calc(100% + -25px)',
+  right: '4%',
+  width: '30%',
+  backgroundColor: '#fff',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
   padding: '10px',
   borderRadius: '5px',
   cursor: 'pointer',
-  zIndex: 2, /* Ensure it appears above the content */
+  zIndex: 2,
 };
 
+const SearchHistory = ({ searchTerm, onSearch, onResearchClick }) => {
+  const handleItemClick = (item) => {
+    // Handle click on search history item
+    alert(`Search History Clicked: ${item}`);
+  };
 
-const SearchHistory = ({ searchTerm, onSearch }) => {
   return (
-    <div className='SeachComponent' style={cssstyle}>
-      {/* Display search history and provide an option to execute the search */}
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
-      <h3>Search History: hellow</h3>
+    <div className='SearchComponent' style={cssstyle}>
+      <h3 className="history-item" onClick={() => handleItemClick('World')}>
+        Search History: World
+      </h3>
+      <h3 className="history-item" onClick={() => handleItemClick('React')}>
+        Search History: React
+      </h3>
     </div>
   );
 };
