@@ -73,7 +73,7 @@ const AdminPage = () => {
   const handleAddContainer = () => {
     const newContainer = {
       id: fileContainers.length + 1,
-      selectedImage: null,
+    selectedImage: null,
     };
 
     setFileContainers([...fileContainers, newContainer]);
@@ -131,7 +131,6 @@ const AdminPage = () => {
         </div>
         <button className='submit' onClick={handleSubmit}> Submit </button>
       </div>
-
     </>
   );
 };

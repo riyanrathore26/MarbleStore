@@ -9,6 +9,7 @@ import Login from './Components/Login';
 import AdminPage from './Components/AdminPage';
 import Seller from './Components/Seller';
 import SellerSignup from './Components/SellerSignup';
+import CreateSeller from './Components/CreateSeller';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Seller" element={<Seller />} />
+          <Route path="/CreateSeller" element={<CreateSeller />} />
           <Route path="/SellerSignup" element={<SellerSignup />} />
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/About" element={<About />} />
