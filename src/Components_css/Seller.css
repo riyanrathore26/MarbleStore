@@ -1,0 +1,9 @@
+.Sellers{
+    display: flex;
+}
+.Seller-Container{
+    width: 30%;
+    margin-top: 2%;
+    margin-left: 2%;
+    border: 2px solid brown;
+}

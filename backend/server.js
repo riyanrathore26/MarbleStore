@@ -95,7 +95,53 @@ app.post('/upload', upload.array('images'), async (req, res) => {
     }
   });
   
-  
+  const SellerSchema = new mongoose.Schema({
+    SellerName: String,
+    SellerAddress: String,
+    SellerNumber: String,
+    // SellerProfilePic: String,
+    ProjectName: String,
+    ProjectPrice: Number,
+    ProjectDescription: String,
+    SellerImages: [String],
+});
+
+const SellerModel = mongoose.model('Seller', SellerSchema);
+
+app.post('/AddSeller', async (req, res) => {
+    console.log(req.body);
+    // const { SellerName, SellerAddress, SellerNumber,SellerImages, ProjectName, ProjectDescription,  ProjectPrice } = req.body;
+    // console.log(req.body.name);
+
+    const seller = new SellerModel({
+        SellerName:req.body.name,
+        SellerAddress:req.body.address,
+        SellerNumber:req.body.phoneNumber,
+        // SellerProfilePic,
+        ProjectName:req.body.projectInfo.name,
+        ProjectPrice:req.body.projectInfo.price,
+        ProjectDescription:req.body.projectInfo.description,
+        SellerImages:req.body.images,
+    });
+
+    try {
+        await seller.save();
+        res.json({ message: 'Signup successful!' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+app.get('/ShowSeller', async (req, res) => {
+    try {
+        const sellers = await SellerModel.find();
+        res.json(sellers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
   
 
 // Specify the collection name for the User model
@@ -158,8 +204,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-  
 
 
 app.listen(port, () => {
