@@ -27,8 +27,21 @@ const Login = () => {
       });
 
       if (response.ok) {
-        // Handle successful login, e.g., redirect to a dashboard
-        setError("congress");
+        // Handle successful login
+        // Store email in localStorage
+        // Assuming you have set the item
+          localStorage.setItem('loggedInEmail', email);
+
+          // Checking if the item is set
+          const storedEmail = localStorage.getItem('loggedInEmail');
+
+          if (storedEmail !== null && storedEmail !== undefined) {
+            alert('Value successfully set in localStorage: ' + storedEmail);
+          } else {
+            alert('Failed to set value in localStorage');
+          }
+        // Redirect to a dashboard or home page
+        window.location.href = "/Home";
       } else {
         // Handle unsuccessful login, show an error message
         setError("Invalid email or password. Please try again.");

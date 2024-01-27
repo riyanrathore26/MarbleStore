@@ -4,19 +4,69 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-
+const http = require('http');
+const crypto = require('crypto');
+const util = require('util');
+const { Server } = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 const port = 5000;
+
+io.on('connection', (socket) => {
+  console.log('User connected');
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+});
 
 app.use(bodyParser.json());
 app.use(cors());
 
 mongoose.connect('mongodb://localhost:27017/MarbleStore', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
+// ... other middleware
+
+app.post('/api/messages', async (req, res) => {
+  try {
+    const { sender, receiver, content } = req.body;
+    const newMessage = new Message({ sender, receiver, content });
+    await newMessage.save();
+    res.status(200).send('Message saved successfully');
+  } catch (error) {
+    console.error('Error saving message:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/api/messages/:sender/:receiver', async (req, res) => {
+  try {
+    const { sender, receiver } = req.params;
+    const messages = await Message.find({
+      $or: [
+        { sender, receiver },
+        { sender: receiver, receiver: sender },
+      ],
+    }).sort({ timestamp: 1 });
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.use(bodyParser.json());
+app.use(cors());
 
 
 // Serve images from the public folder
@@ -176,32 +226,34 @@ app.post('/signup', async (req, res) => {
 });
 
 // Login endpoint
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    console.log(email, password);
-    try {
-        const user = await User.findOne({ email });
-        console.log(user);
+// Convert crypto.pbkdf2 to promise-based
+const pbkdf2Async = util.promisify(crypto.pbkdf2);
 
-        if (user) {
-            // If the user exists, compare the provided password with the stored hash
-            const isPasswordValid = user.password === password; // This assumes passwords are stored as plain text, not recommended for production
-            console.log(isPasswordValid);
-            if (isPasswordValid) {
-                // Successful login
-                res.json({ message: 'Login successful!' });
-            } else {
-                // Incorrect password
-                res.status(401).json({ message: 'Invalid email or password.' });
-            }
-        } else {
-            // User not found
-            res.status(401).json({ message: 'Invalid email or password.' });
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
-        res.status(500).json({ message: 'Error occurred during login.' });
-    }
+// Your user model or schema should have a field 'passwordHash' to store the hashed password
+
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  console.log(email, password);
+
+  try {
+    const users = await User.find();
+    // console.log("JI",users);
+    for (const user of users) {
+      console.log("Comparing:", user.email, email, user.password, password);
+      if (user.email === email || user.password === password) {
+        // Successful login
+        console.log("Working", user.email, user._id);
+        return res.json({ message: 'Login successful!', userId: user._id });
+      }
+    }    
+    // If no matching user is found
+    console.log("Not working");
+    res.status(401).json({ message: 'Invalid email or password.' });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Error occurred during login.' });
+  }
 });
 
 

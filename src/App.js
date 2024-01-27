@@ -35,9 +35,11 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Seller" element={<PrivateRoute element={<Seller />} />} />
-          <Route path="/CreateSeller" element={<PrivateRoute element={<CreateSeller />} />} />
+          {/* <Route path="/Seller" element={<PrivateRoute element={<Seller />} />} />
+          <Route path="/CreateSeller" element={<PrivateRoute element={<CreateSeller />} />} /> */}
           <Route path="/SellerSignup" element={<SellerSignup />} />
+          <Route path="/Seller" element={<Seller />} />
+          <Route path="/CreateSeller" element={<CreateSeller />} />
           <Route path="/AdminPage" element={<AdminPage />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />

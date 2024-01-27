@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../Components_css/Signup.css'
+import { Link, Navigate } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
 
 const Signup = () => {
@@ -23,6 +24,7 @@ const Signup = () => {
 
             // Alert values after successful signup
             alert(`Signup successful! Username: ${username}, Password: ${password}, email: ${email}`);
+            window.location.href = "/Login";
         } catch (error) {
             console.error('Error during signup:', error);
         }
@@ -62,6 +64,9 @@ const Signup = () => {
             <br />
             <button type="button" onClick={handleSignup} className='loginBtn'>
                 Signup
+            </button>
+            <button type="button" className='loginBtn'>
+            <Link to="/Login">Go to Login</Link>
             </button>
         </div>
         </>

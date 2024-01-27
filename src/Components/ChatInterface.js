@@ -1,58 +1,51 @@
-import React, { useState } from 'react';
+// ChatInterface.js (Frontend)
+import React, { useState, useEffect } from 'react';
 import '../Components_css/ChatInterface.css';
+import axios from 'axios';
 
-const ChatInterface = ({ onClose }) => {
+const ChatInterface = ({ onClose, sender, seller_id, SellerName }) => {
+  const [loggedInEmail, setLoggedInEmail] = useState('');
   const [userMessage, setUserMessage] = useState('');
-  const [messages, setMessages] = useState(['How can I assist you, sir?']);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    // Fetch initial messages when the chat interface opens
+    const storedEmail = localStorage.getItem('loggedInEmail');
+    setLoggedInEmail(storedEmail || '');
+    console.log("HI", seller_id, "and", storedEmail);
+    fetchMessages(storedEmail, seller_id);
+  }, []);
+
+  const fetchMessages = async (storedEmail, seller_id) => {
+    try {
+      const response = await axios.get(`/api/messages/${storedEmail}/${seller_id}`);
+      const messages = response.data;
+      // Handle messages
+      setMessages(messages);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
 
   const handleInputChange = (event) => {
     setUserMessage(event.target.value);
   };
 
   const handleSend = async () => {
-    // Check if the user has entered a message
     if (userMessage.trim() === '') {
       return;
     }
 
-    // Send the user's message to the ChatGPT API
-    const apiKey = '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';
-    const apiUrl = 'https://api.openai.com/v1/chat/completions';
+    const sellerResponse = `Hi, this is ${seller_id}. You said: ${userMessage}`;
+
+    setMessages((prevMessages) => [...prevMessages, userMessage, sellerResponse]);
+    setUserMessage('');
 
     try {
-// Send the user's message to the ChatGPT API
-const response = await fetch(apiUrl, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${apiKey}`,
-  },
-  body: JSON.stringify({
-    model: 'text-davinci-002', // Specify the model you want to use
-    messages: [
-      { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: userMessage },
-    ],
-  }),
-});
-
-
-      // Log the entire response for debugging
-      console.log('API Response:', response);
-
-      // Parse and handle the response
-      const result = await response.json();
-
-      // Check for a valid response structure
-      if (result && Array.isArray(result.choices) && result.choices.length > 0) {
-        const chatGptMessage = result.choices[0]?.message?.content || '';
-
-        // Update the messages
-        setMessages((prevMessages) => [...prevMessages, userMessage, chatGptMessage]);
-      } else {
-        console.error('Unexpected response format:', result);
-      }
-
+      // Send the message to the backend for saving
+      await axios.post('/api/messages', { storedEmail: loggedInEmail, seller_id, content: userMessage });
+      // Fetch updated messages after sending a new one
+      fetchMessages(loggedInEmail, seller_id);
       // Clear the input field
       setUserMessage('');
     } catch (error) {
@@ -63,7 +56,7 @@ const response = await fetch(apiUrl, {
   return (
     <div className="chat-interface">
       <div className="header">
-        <span>Chat Interface</span>
+        <span>Chat Interface - {SellerName}</span>
         <button onClick={onClose}>X</button>
       </div>
       <div className="messages">
