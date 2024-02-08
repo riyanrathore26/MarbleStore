@@ -3,12 +3,15 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './Components/Home';
 import About from './Components/About';
 import Contact from './Components/Contact';
-import Signup from './Components/Singup';
-import Login from './Components/Login';
+// import Signup from './Components/Singup';
+// import Login from './Components/Login';
+import Login from './Components/Chat_Components/pages/Login';
+import Register from './Components/Chat_Components/pages/Register';
 import AdminPage from './Components/AdminPage';
 import Seller from './Components/Seller';
 import SellerSignup from './Components/SellerSignup';
 import CreateSeller from './Components/CreateSeller';
+import Home2 from './Components/Chat_Components/pages/Home';
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
@@ -35,6 +38,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Chat" element={<Home2 />} />
           {/* <Route path="/Seller" element={<PrivateRoute element={<Seller />} />} />
           <Route path="/CreateSeller" element={<PrivateRoute element={<CreateSeller />} />} /> */}
           <Route path="/SellerSignup" element={<SellerSignup />} />
@@ -44,7 +48,7 @@ const App = () => {
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/Signup" element={<Signup />} />
+          <Route path="/Signup" element={<Register />} />
         </Routes>
       </Router>
     </div>

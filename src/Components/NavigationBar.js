@@ -53,6 +53,7 @@ const NavigationBar = () => {
         <li><Link to="/About">About</Link></li>
         <li><Link to="/Seller">Seller</Link></li>
         <li><Link to="/Signup">Signup</Link></li>
+        <li><Link to="/Chat">Chatting</Link></li>
       </ul>
 
       <div className="search-input-container">

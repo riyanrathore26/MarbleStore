@@ -72,3 +72,13 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## to start backend and frontend in one command add this in package.json
+// "scripts": {
+//   "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
+//   "start-backend": "cd backend && node server.js",
+//   "start-frontend": "react-scripts start"
+//   // other scripts...
+// }
+
+and run npm start

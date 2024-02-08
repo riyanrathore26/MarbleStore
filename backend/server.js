@@ -197,7 +197,7 @@ app.get('/ShowSeller', async (req, res) => {
 // Specify the collection name for the User model
 //Schema for Signup Page
 const userSchema = new mongoose.Schema({
-    username: String,
+    displayName: String,
     email: String,
     password: String,
 }, { collection: 'Signup_data' }); // Specify the collection name here
@@ -208,10 +208,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post('/signup', async (req, res) => {
-    const { username, email, password } = req.body;
-    console.log(username, email, password);
+    const { displayName, email, password } = req.body;
+    console.log(displayName, email, password);
     const newUser = new User({
-        username,
+        displayName,
         email,
         password,
     });

@@ -2,34 +2,35 @@ import React, { useState } from 'react';
 import '../Components_css/Signup.css'
 import { Link, Navigate } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
-
+import { app } from "../firebase";
+import {getAuth,createUserWithEmailAndPassword} from "firebase/auth";
+const auth = getAuth(app);
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [email, setemail] = useState('');
     const [password, setPassword] = useState('');
-
     const handleSignup = async () => {
         try {
-            // Send signup data to the server
+            createUserWithEmailAndPassword(auth,email,password)
+            .then((value) => console.log(value));
             const response = await fetch('http://localhost:5000/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username,email, password }),
+                body: JSON.stringify({ username, email, password }),
             });
+            if (response.ok) {
+                Navigate('/Login')
+            }
             // Handle the response
             const result = await response.json();
-            console.log(result);
-
-            // Alert values after successful signup
-            alert(`Signup successful! Username: ${username}, Password: ${password}, email: ${email}`);
             window.location.href = "/Login";
         } catch (error) {
             console.error('Error during signup:', error);
         }
     };
-
+    
     return (
         <>
         <NavigationBar/>
