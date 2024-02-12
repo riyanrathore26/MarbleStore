@@ -43,7 +43,7 @@ const PostData = () => {
       {products.map(product => (
         <div key={product._id} className='Slide-Container'>
           {/* Use the new index value to change the image */}
-          <img src={`http://localhost:5000/images/${product.images[indexMap[product._id] || 0]}`} alt={product.name} />
+          <img src={`${product.images[indexMap[product._id] || 0]}`} alt={product.name} />
           <h1>Name:-{product.name}</h1>
           <h1>Price:-{product.price}</h1>
           <button className='Post-Btn prev' onClick={() => fun(product._id, 'previous')}></button>

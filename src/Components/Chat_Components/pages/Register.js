@@ -22,6 +22,9 @@ const Signup = () => {
     const file = e.target[3].files[0];
     try {
       //Create user
+      console.log(displayName);
+      console.log(email);
+      console.log(password);
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await fetch('http://localhost:5000/signup', {
                 method: 'POST',

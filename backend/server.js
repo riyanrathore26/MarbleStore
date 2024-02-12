@@ -3,67 +3,79 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const multer = require('multer');
+const AWS = require('aws-sdk');
 const path = require('path');
-const http = require('http');
-const crypto = require('crypto');
-const util = require('util');
-const { Server } = require('socket.io');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
 const port = 5000;
-
-io.on('connection', (socket) => {
-  console.log('User connected');
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
-  });
-});
 
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/MarbleStore', {
+const bucketName = "marblestorebucket";
+
+const awsConfig = {
+  accessKeyId: 'AKIAQ3EGTSW2HAMVYJH2',
+  secretAccessKey: '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',
+  region: 'ap-south-1'
+};
+
+const S3 = new AWS.S3(awsConfig);
+
+const uploadToS3 = (fileData) => {
+  return new Promise((resolve, reject) => {
+      const params = {
+          Bucket: bucketName,
+          Key: `Marbles_img/${fileData.originalname}`,
+          Body: fileData.buffer, // Extract the buffer from the file object
+      };
+      S3.upload(params, (err, data) => {
+          if (err) {
+              return reject(err);
+          }
+          console.log(data.Location);
+          return resolve(data);
+      });
+  });
+};
+
+
+mongoose.connect('mongodb+srv://rk5098863:Riyan123@marblestore.by9ai9c.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useUnifiedTopology:true,
+}).then(() => {
+}).catch((err) => console.log(err));
+
+const postSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  images: [String],
 });
 
-// ... other middleware
+const Post = mongoose.model('Post', postSchema, 'Posts');
 
-app.post('/api/messages', async (req, res) => {
-  try {
-    const { sender, receiver, content } = req.body;
-    const newMessage = new Message({ sender, receiver, content });
-    await newMessage.save();
-    res.status(200).send('Message saved successfully');
-  } catch (error) {
-    console.error('Error saving message:', error);
-    res.status(500).send('Internal Server Error');
-  }
+const SellerSchema = new mongoose.Schema({
+  SellerName: String,
+  SellerAddress: String,
+  SellerNumber: String,
+  // SellerProfilePic: String,
+  ProjectName: String,
+  ProjectPrice: Number,
+  ProjectDescription: String,
+  SellerImages: [String],
 });
 
-app.get('/api/messages/:sender/:receiver', async (req, res) => {
-  try {
-    const { sender, receiver } = req.params;
-    const messages = await Message.find({
-      $or: [
-        { sender, receiver },
-        { sender: receiver, receiver: sender },
-      ],
-    }).sort({ timestamp: 1 });
-    res.json(messages);
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+const SellerModel = mongoose.model('Seller', SellerSchema);
 
+const userSchema = new mongoose.Schema({
+  displayName: String,
+  email: String,
+  password: String,
+}, { collection: '`Signup_data`' }); // Specify the collection name here
+
+const User = mongoose.model('User', userSchema);
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -78,24 +90,12 @@ app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 app.get('/posts', async (req, res) => {
     try {
         const posts = await Post.find();
-        console.log(posts);
         res.json(posts);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
-const postSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    price: Number,
-    images: [String],
-});
-
-const Post = mongoose.model('Post', postSchema, 'Posts');
-
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -117,46 +117,41 @@ const storage2 = multer.diskStorage({
   });
   
 
-app.post('/upload', upload.array('images'), async (req, res) => {
+  app.post('/upload', upload.array('images', 3), async (req, res) => {
     try {
-      const { name, description, price } = req.body;
-  
-      // Check if req.files is an array and not empty
-      const imagePaths = req.files.map(file => {
-        if (file && file.originalname) {
-          return file.originalname;
-        }
-        return null;
-      }).filter(path => path !== null);
-  
-      const newProduct = new Post({
-        name,
-        description,
-        price,
-        images: imagePaths,
-      });
-  
-      await newProduct.save();
-  
-      res.status(201).send('Product added successfully!');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-  
-  const SellerSchema = new mongoose.Schema({
-    SellerName: String,
-    SellerAddress: String,
-    SellerNumber: String,
-    // SellerProfilePic: String,
-    ProjectName: String,
-    ProjectPrice: Number,
-    ProjectDescription: String,
-    SellerImages: [String],
-});
+        const { name, description, price } = req.body;
 
-const SellerModel = mongoose.model('Seller', SellerSchema);
+        // Wait for all promises to resolve before processing
+        const imagePaths = (await Promise.all(req.files.map(async file => {
+            if (file && file.originalname) {
+                const urlimg = await uploadToS3(file);
+                console.log(urlimg);
+                console.log(urlimg.Location);
+                return urlimg.Location;
+            }
+            return null;
+        }))).flat(); // Flatten the array of arrays
+
+        console.log(imagePaths);
+
+        // Now that all promises have resolved and the array is flattened, you can proceed with saving the data
+        const newProduct = new Post({
+            name,
+            description,
+            price,
+            images: imagePaths,
+        });
+
+        await newProduct.save();
+
+        res.status(201).send('Product added successfully!');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+  
+
 
 app.post('/AddSeller', async (req, res) => {
     console.log(req.body);
@@ -192,17 +187,6 @@ app.get('/ShowSeller', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-  
-
-// Specify the collection name for the User model
-//Schema for Signup Page
-const userSchema = new mongoose.Schema({
-    displayName: String,
-    email: String,
-    password: String,
-}, { collection: 'Signup_data' }); // Specify the collection name here
-
-const User = mongoose.model('User', userSchema);
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -225,12 +209,6 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// Login endpoint
-// Convert crypto.pbkdf2 to promise-based
-const pbkdf2Async = util.promisify(crypto.pbkdf2);
-
-// Your user model or schema should have a field 'passwordHash' to store the hashed password
-
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -240,7 +218,6 @@ app.post('/login', async (req, res) => {
     const users = await User.find();
     // console.log("JI",users);
     for (const user of users) {
-      console.log("Comparing:", user.email, email, user.password, password);
       if (user.email === email || user.password === password) {
         // Successful login
         console.log("Working", user.email, user._id);
@@ -256,10 +233,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
-
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
-
-

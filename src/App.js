@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './Components/Home';
 import About from './Components/About';
 import Contact from './Components/Contact';
-// import Signup from './Components/Singup';
-// import Login from './Components/Login';
+import Signup from './Components/Chat_Components/pages/Register';
 import Login from './Components/Chat_Components/pages/Login';
 import Register from './Components/Chat_Components/pages/Register';
 import AdminPage from './Components/AdminPage';
@@ -16,9 +15,6 @@ import Home2 from './Components/Chat_Components/pages/Home';
 const App = () => {
   const [authenticated, setAuthenticated] = useState(false);
   useEffect(() => {
-    // Perform your authentication logic here (e.g., check if the user is logged in)
-    // Set the authenticated state based on the result
-    // For demonstration purposes, I'm setting it to true by default
     setAuthenticated(false);
   }, []);
 

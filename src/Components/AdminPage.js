@@ -51,19 +51,6 @@ const AdminPage = () => {
       if (!response1.ok) {
         return;
       }
-
-      // Second API call
-      const response2 = await fetch('http://localhost:5000/api/upload', {
-        method: 'POST',
-        body: formData2,
-      });
-
-      if (response2.ok) {
-        console.log(formData);
-        alert('Product added successfully!');
-      } else {
-        alert('Error adding product. Please try again.');
-      }
     } catch (error) {
       console.error(error);
       alert('An error occurred. Please try again.');
