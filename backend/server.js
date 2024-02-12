@@ -12,11 +12,14 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
+require('dotenv').config();
+
+
 const bucketName = "marblestorebucket";
 
 const awsConfig = {
-  accessKeyId: 'AKIAQ3EGTSW2HAMVYJH2',
-  secretAccessKey: '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',
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'ap-south-1'
 };
 
