@@ -43,7 +43,7 @@ const uploadToS3 = (fileData) => {
 };
 
 
-mongoose.connect('mongodb+srv://rk5098863:Riyan123@marblestore.by9ai9c.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect(process.env.Mongodb_url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useUnifiedTopology:true,
