@@ -28,7 +28,7 @@ const PostData = () => {
 
   useEffect(() => {
     // Fetch data from the backend (replace with your actual backend URL)
-    axios.get('http://localhost:5000/posts')
+    axios.get('https://marblestore-gdqv.onrender.com/posts')
       .then(response => {
         setProducts(response.data);
       })
