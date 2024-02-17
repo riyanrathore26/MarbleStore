@@ -10,7 +10,7 @@ const Seller = () => {
   const [indexMap, setIndexMap] = useState({});
 
   useEffect(() => {
-    axios.get('http://localhost:5000/ShowSeller')
+    axios.get('https://marblestore-gdqv.onrender.com/ShowSeller')
       .then(response => {
         console.log(response.data);
         setProducts(response.data);

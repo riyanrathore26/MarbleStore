@@ -232,7 +232,7 @@ class ComponentThree extends React.Component {
   AddSeller = async () => {
     alert("HI");
     try {
-      const response = await fetch('http://localhost:5000/AddSeller', {
+      const response = await fetch('https://marblestore-gdqv.onrender.com/AddSeller', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -43,7 +43,7 @@ const AdminPage = () => {
 
     try {
       // First API call
-      const response1 = await fetch('http://localhost:5000/upload', {
+      const response1 = await fetch('https://marblestore-gdqv.onrender.com/upload', {
         method: 'POST',
         body: formData,
       });
