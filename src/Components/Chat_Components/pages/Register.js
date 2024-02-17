@@ -26,7 +26,7 @@ const Signup = () => {
       console.log(email);
       console.log(password);
       const res = await createUserWithEmailAndPassword(auth, email, password);
-      await fetch('http://localhost:5000/signup', {
+      await fetch('https://marblestore-gdqv.onrender.com/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
