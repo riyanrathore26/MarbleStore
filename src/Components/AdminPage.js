@@ -73,7 +73,7 @@ const AdminPage = () => {
   return (
     <>
       <NavigationBar />
-      <h1>Add Information About Product</h1>
+      <h1 className='h1_text'>Add Information About Product</h1>
       <div className='Big-container'>
         <div className="container">
           {fileContainers.map((container) => (
@@ -104,7 +104,7 @@ const AdminPage = () => {
             placeholder='Enter Name'
           />
           <label htmlFor="Description">Enter Description:</label>
-          <input
+          <textarea rows={15} cols={72}
             type='text'
             name='Description'
             placeholder='Enter Description'
@@ -115,8 +115,8 @@ const AdminPage = () => {
             name='Price'
             placeholder='Enter Price'
           />
+        <button className='submit_Post' onClick={handleSubmit}> Submit </button>
         </div>
-        <button className='submit' onClick={handleSubmit}> Submit </button>
       </div>
     </>
   );
