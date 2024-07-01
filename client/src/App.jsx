@@ -20,7 +20,7 @@ import Signup from './authComponent/Signup';
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: "/home",
       element: <><Navbar/><Homepage/></>
     },
     {
@@ -52,7 +52,7 @@ function App() {
       element: <><Navbar/><Signup/></>
     },
     {
-      path: "/admin",
+      path: "/",
       element: <><AdminPage/></>
     },
     {
