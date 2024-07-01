@@ -1,0 +1,59 @@
+.sliderbox{
+    margin-top: 1pc;
+    width: 100%;
+    height: 50vh;
+    background-color: aliceblue;
+  }
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: rgb(10, 10, 10); /* Change the color of the navigation buttons */
+    background-color: rgba(0, 0, 0, 0.4); 
+    border-radius: 10px;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+  }
+  /* ----------------------------second home css--------------------------------- */
+  
+  .secondhome{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    padding: 60px;
+  }
+  .secondhome .box{
+    flex-basis: 50%;
+    margin: 10px;
+    height: 90%;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .secondhome .box .subbox{
+    margin: 10px;
+    width: 47%;
+    height: 45%;
+    border-radius: 5px;
+    border: 1px solid black;
+  }
+  @media (max-width:580px) {
+    .secondhome {
+      position: relative;
+      flex-basis: 100%;
+    }
+    .secondhome >.box{
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      margin: 20px ;
+      top:0;
+      left: 0;
+  
+      background-color: red;
+    }
+    .secondhome .box1 {
+      display: none;
+    }
+  }
+  
