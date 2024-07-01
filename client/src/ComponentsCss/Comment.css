@@ -1,0 +1,97 @@
+/* Container for the entire component */
+.commnetform {
+    margin: 20px auto;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.commnetform form {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.commnetform input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.commnetform input:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.commnetform button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(45deg, #f06, #f79);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.commnetform button:hover {
+    background: linear-gradient(45deg, #f79, #f06);
+    transform: scale(1.05);
+}
+
+.commnetform button:active {
+    transform: scale(0.95);
+}
+
+.comments-grid {
+    margin: 20px auto;
+    max-width: 800px;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 20px;
+}
+
+.comment {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.comment h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.comment h6 {
+    font-size: 14px;
+    color: #666;
+    background-color: lightgray;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-top: 40px;
+}

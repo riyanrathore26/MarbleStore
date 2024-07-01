@@ -1,0 +1,114 @@
+.footer {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    background-image: url(img/Footer_bg.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.footer>img {
+    width: 100%;
+    height: auto;
+}
+
+.list-box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.list-box ul {
+    flex: 1 1 200px;
+    margin: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.list-box ul h1 {
+    font-size: 18px;
+    color: #aa2b57;
+    margin-bottom: 10px;
+}
+
+.list-box ul li a {
+    color: white;
+    font-size: 15px;
+    display: block;
+    margin: 5px 0;
+    text-decoration: none;
+}
+
+.icon-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.icon-box .icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #aa2b57;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.icon-box .icon:hover {
+    transform: scale(1.1);
+}
+
+.footer-text {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .list-box {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .list-box ul {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+
+    .icon-box {
+        flex-direction: row;
+    }
+
+    .icon-box .icon,
+    .icon-text,
+    .icon-img {
+        margin: 10px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-text {
+        font-size: 12px;
+    }
+
+    .icon-box .icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
