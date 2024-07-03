@@ -68,4 +68,50 @@ router.post('/api/search', async (req, res) => {
   }
 });
 
+// Update product route
+router.put('/updateProduct/:id', upload.array('images', 13), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, price, images } = req.body;
+    const imagePaths = images ? [...images] : [];
+    console.log("id",id,"name",name,"description",description,"price",price,"images",imagePaths);
+    const updatedProduct = {
+      name,
+      description,
+      price,
+      images: imagePaths,
+    };
+
+    const result = await Post.findByIdAndUpdate(id, updatedProduct, { new: true });
+
+    if (!result) {
+      return res.status(404).send('Product not found');
+    }
+
+    res.status(200).send('Product updated successfully!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.delete('/deleteProduct/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Attempt to delete the product from the database
+    const result = await Post.findByIdAndDelete(id);
+
+    if (result) {
+      res.status(200).send('Product deleted successfully');
+    } else {
+      res.status(404).send('Product not found');
+    }
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 module.exports = router;

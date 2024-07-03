@@ -11,7 +11,7 @@ const awsConfig = {
 const S3 = new AWS.S3(awsConfig);
 
 const uploadToS3 = (fileData) => {
-  const bucketName = "marblestorebucket";
+  const bucketName = "marblestorebucket0786";
   return new Promise((resolve, reject) => {
     const params = {
       Bucket: bucketName,

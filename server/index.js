@@ -18,6 +18,8 @@ connectDB();
 app.use('/api', productRoutes);
 app.use('/api', commentRoutes);
 app.use('/api', authRoutes);
+app.use('/api/updateProduct', productRoutes);
+app.use('/api/deleteProduct', productRoutes);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
