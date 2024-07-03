@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../ComponentsCss/AdminPage.css'
+import ApageProduct from './ApageProduct';
 
 const AdminPage = () => {
     const [fileContainers, setFileContainers] = useState([{ id: 1, selectedImage: null }]);
@@ -117,6 +118,7 @@ const AdminPage = () => {
                 </div>
             </div>
             <ToastContainer />
+            <ApageProduct/>
         </div>
     );
 };
