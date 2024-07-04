@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../config';
 import axios from 'axios';
+
 export default function ApageProduct() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -22,11 +23,15 @@ export default function ApageProduct() {
   const handleEditProduct = (product) => {
     setEditingProduct({ ...product });
   };
-  const handleDeleteProduct = async (products)=>{
+
+  const handleDeleteProduct = async (productId) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/api/deleteProduct/${products}`);
+      const response = await axios.delete(`${BASE_URL}/api/deleteProduct/${productId}`);
+      if (response.status === 200) {
+        setProducts(products.filter(product => product._id !== productId));
+      }
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error deleting product:', error);
     }
   };
 
@@ -42,7 +47,7 @@ export default function ApageProduct() {
       const data = await response.json();
       if (data.success) {
         // Update product list after saving changes
-        setProducts(products.map((product) => (product.id === editingProduct.id ? editingProduct : product)));
+        setProducts(products.map((product) => (product._id === editingProduct._id ? editingProduct : product)));
         setEditingProduct(null); // Clear editing state
       } else {
         console.error('Error updating product:', data.message);
@@ -68,8 +73,8 @@ export default function ApageProduct() {
       <h1>Products</h1>
       <div className="product-list" style={{ display: 'flex', flexWrap: 'wrap' }}>
         {products.map((product) => (
-          <div key={product.id} className="product-item" style={{ margin: '10px', width: '100%' }}>
-            {editingProduct && editingProduct.id === product.id ? (
+          <div key={product._id} className="product-item" style={{ margin: '10px', width: '100%' }}>
+            {editingProduct && editingProduct._id === product._id ? (
               <div className="product-edit-form">
                 <input
                   type="text"
@@ -94,7 +99,7 @@ export default function ApageProduct() {
                 <div className="image-edit-section" style={{ display: 'flex', flexDirection: 'column' }}>
                   {editingProduct.images.map((image, index) => (
                     <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                      <h6>{index+1}</h6>
+                      <h6>{index + 1}</h6>
                       <input
                         type="text"
                         value={image}

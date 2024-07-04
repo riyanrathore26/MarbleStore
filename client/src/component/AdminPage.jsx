@@ -3,11 +3,11 @@ import { BASE_URL } from '../config';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../ComponentsCss/AdminPage.css'
+import '../ComponentsCss/AdminPage.css';
 import ApageProduct from './ApageProduct';
 
 const AdminPage = () => {
-    const [fileContainers, setFileContainers] = useState([{ id: 1, selectedImage: null }]);
+    const [fileContainers, setFileContainers] = useState([{ id: 1, selectedImage: null, previewUrl: null }]);
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -15,9 +15,10 @@ const AdminPage = () => {
 
     const handleImageChange = (event, containerId) => {
         const file = event.target.files[0];
+        const previewUrl = URL.createObjectURL(file);
         setFileContainers((prevContainers) =>
             prevContainers.map((container) =>
-                container.id === containerId ? { ...container, selectedImage: file } : container
+                container.id === containerId ? { ...container, selectedImage: file, previewUrl } : container
             )
         );
     };
@@ -50,7 +51,7 @@ const AdminPage = () => {
                 setName('');
                 setPrice('');
                 setDescription('');
-                setFileContainers([{ id: 1, selectedImage: null }]);
+                setFileContainers([{ id: 1, selectedImage: null, previewUrl: null }]);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -65,6 +66,7 @@ const AdminPage = () => {
         const newContainer = {
             id: fileContainers.length + 1,
             selectedImage: null,
+            previewUrl: null,
         };
         setFileContainers([...fileContainers, newContainer]);
     };
@@ -85,6 +87,13 @@ const AdminPage = () => {
                             <label htmlFor={`file-input-${container.id}`}>
                                 <i className="fas fa-upload"></i> Choose Image
                             </label>
+                            {container.previewUrl && (
+                                <img
+                                    src={container.previewUrl}
+                                    alt="Selected"
+                                    style={{ width: '100px', height: '100px', marginLeft: '10px' }}
+                                />
+                            )}
                         </div>
                     ))}
                     <button className="add-image-button" onClick={handleAddContainer}>
