@@ -48,6 +48,7 @@ const Signup = () => {
         <input type="email" name="email" onChange={handleChange} placeholder="Email" />
         <input type="password" name="password" onChange={handleChange} placeholder="Password" />
         <button type="submit">Sign Up</button>
+        <h3>Already have accout?<h6><a href="Login">Login</a></h6></h3>
       </form>
       
       <Modal isOpen={modalIsOpen}>

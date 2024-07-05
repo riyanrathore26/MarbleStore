@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
-
 const Login = () => {
   const [form, setForm] = useState({ username: '', password: '' });
   const navigate = useNavigate();
@@ -29,6 +28,7 @@ const Login = () => {
       <input type="text" name="username" onChange={handleChange} placeholder="Username" />
       <input type="password" name="password" onChange={handleChange} placeholder="Password" />
       <button type="submit">Login</button>
+      <h3>Don't have accout?<h6><a href="Signup">Sign-up</a></h6></h3>
     </form>
   );
 };

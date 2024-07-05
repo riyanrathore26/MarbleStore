@@ -53,7 +53,7 @@ function App() {
     },
     {
       path: "/",
-      element: <><AdminPage/></>
+      element: <><Navbar/><AdminPage/></>
     },
     {
       path: "/subProduct",
