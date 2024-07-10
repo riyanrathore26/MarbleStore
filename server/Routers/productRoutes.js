@@ -9,7 +9,7 @@ const upload = multer({ storage: storage });
 
 router.post('/addProduct', upload.array('images', 13), async (req, res) => {
   try {
-    const { name, description, price } = req.body;
+    const { name, description, price,tags } = req.body;
     const imagePaths = (await Promise.all(req.files.map(async file => {
       if (file && file.originalname) {
         const urlimg = await uploadToS3(file);
@@ -23,6 +23,7 @@ router.post('/addProduct', upload.array('images', 13), async (req, res) => {
       description,
       price,
       images: imagePaths,
+      tags,
     });
 
     await newProduct.save();
