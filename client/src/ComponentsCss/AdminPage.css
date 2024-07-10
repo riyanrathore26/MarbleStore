@@ -92,3 +92,10 @@ textarea {
 .submit-button:hover {
     background-color: #2f855a;
 }
+.tag{
+    background-color: lightgreen;
+    border: 1px solid;
+    margin-right: 5px;
+    padding: 2px;
+    cursor: pointer;
+}

@@ -11,7 +11,15 @@ const AdminPage = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const token = localStorage.getItem('token');
+    const [tags, setTags] = useState('');
+    const [currentTags, setCurrentTags] = useState([]);
+
+    const availableTags = {
+        slabs: ['white', 'black', 'brown'],
+        handicraft: ['animal', 'mandir'],
+        flower: ['flower1', 'flower2', 'flower3'],
+        Designs: ['Designs1', 'Designs2', 'Designs3'],
+    };
 
     const handleImageChange = (event, containerId) => {
         const file = event.target.files[0];
@@ -23,11 +31,19 @@ const AdminPage = () => {
         );
     };
 
+    const handleCategoryClick = (category) => {
+        setCurrentTags(availableTags[category]);
+    };
+    const handleTagClick = (tag) => {
+        setTags((prevTags) => (prevTags ? `${prevTags}, ${tag}` : tag));
+    };
+
     const handleSubmit = async () => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
         formData.append('description', description);
+        formData.append('tags', tags.split(',').map(tag => tag.trim())); // Add this line
 
         fileContainers.forEach((container) => {
             if (container.selectedImage) {
@@ -36,12 +52,7 @@ const AdminPage = () => {
         });
 
         try {
-            console.log("Uploading...")
-            const response = await axios.post(`${BASE_URL}/api/addProduct`, formData, {
-                // headers: {
-                //   Authorization: token ? `Bearer ${token}` : '' // Include 'Bearer' prefix if required
-                // }
-            });
+            const response = await axios.post(`${BASE_URL}/api/addProduct`, formData);
 
             if (response.status === 201) {
                 toast.success('Product added successfully!', {
@@ -52,6 +63,7 @@ const AdminPage = () => {
                 setName('');
                 setPrice('');
                 setDescription('');
+                setTags('');
                 setFileContainers([{ id: 1, selectedImage: null, previewUrl: null }]);
             }
         } catch (error) {
@@ -122,13 +134,45 @@ const AdminPage = () => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
+                    <label htmlFor="tags">Tags (comma separated):</label>
+                    <input
+                        type="text"
+                        id="tags"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                    />
+                    <div className="categories">
+                        {Object.keys(availableTags).map((category) => (
+                            <span
+                                key={category}
+                                className="category tag"
+                                onClick={() => {
+                                    handleCategoryClick(category);
+                                    handleTagClick(category);
+                                }}
+                            >
+                                {category}
+                            </span>
+                        ))}
+                    </div>
+                    <div className="tag-suggestions">
+                        {currentTags.map((tag) => (
+                            <span
+                                key={tag}
+                                className="tag"
+                                onClick={() => handleTagClick(tag)}
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
                     <button className="submit-button" onClick={handleSubmit}>
                         Submit
                     </button>
                 </div>
             </div>
             <ToastContainer />
-            <ApageProduct/>
+            <ApageProduct />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../config';
 import axios from 'axios';
+// import { uploadToS3 } from '../../../server/Routers/UploadtoS3';
 
 export default function ApageProduct() {
   const [products, setProducts] = useState([]);
@@ -68,6 +69,22 @@ export default function ApageProduct() {
     setEditingProduct({ ...editingProduct, images: newImages });
   };
 
+  const handleAddImage = () => {
+    setEditingProduct({ ...editingProduct, images: [...editingProduct.images, ''] });
+  };
+
+  const handleImageUpload = async (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const imageUrl = await uploadToS3(file);
+        handleImageChange(index, imageUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    }
+  };
+
   return (
     <div>
       <h1>Products</h1>
@@ -107,8 +124,13 @@ export default function ApageProduct() {
                         placeholder={`Image URL ${index + 1}`}
                         style={{ flex: 1 }}
                       />
+                      <input
+                        type="file"
+                        onChange={(e) => handleImageUpload(e, index)}
+                      />
                     </div>
                   ))}
+                  <button onClick={handleAddImage}>Add Another Image</button>
                 </div>
                 <button onClick={handleSaveChanges}>Save Changes</button>
                 <button onClick={() => setEditingProduct(null)}>Cancel</button>
