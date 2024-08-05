@@ -145,3 +145,28 @@ i{
     padding: 5px;
     cursor: pointer;
 }
+
+
+.categories,
+.tag-suggestions {
+    display: flex;
+    border: 1px #ccc solid;
+    border-radius: 4px;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.tag {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tag.selected {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+

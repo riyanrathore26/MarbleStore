@@ -1,9 +1,11 @@
+// AdminPage.js
 import React, { useState } from 'react';
 import { BASE_URL } from '../config';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ApageProduct from './ApageProduct';
+import availableTags from './availableTags';
 
 const AdminPage = () => {
     const [fileContainers, setFileContainers] = useState([{ id: 1, selectedImage: null, previewUrl: null }]);
@@ -12,13 +14,7 @@ const AdminPage = () => {
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
     const [currentTags, setCurrentTags] = useState([]);
-
-    const availableTags = {
-        slabs: ['white', 'black', 'brown'],
-        handicraft: ['animal', 'mandir'],
-        flower: ['flower1', 'flower2', 'flower3'],
-        Designs: ['Designs1', 'Designs2', 'Designs3'],
-    };
+    const [selectedTags, setSelectedTags] = useState([]);
 
     const handleImageChange = (event, containerId) => {
         const file = event.target.files[0];
@@ -35,7 +31,15 @@ const AdminPage = () => {
     };
 
     const handleTagClick = (tag) => {
-        setTags((prevTags) => (prevTags ? `${prevTags}, ${tag}` : tag));
+        if (!selectedTags.includes(tag)) {
+            setSelectedTags([...selectedTags, tag]);
+            setTags((prevTags) => (prevTags ? `${prevTags}, ${tag}` : tag));
+        }
+    };
+
+    const handleTagRemove = (tagToRemove) => {
+        setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
+        setTags(tags.split(',').filter((tag) => tag.trim() !== tagToRemove).join(', '));
     };
 
     const handleSubmit = async () => {
@@ -43,7 +47,7 @@ const AdminPage = () => {
         formData.append('name', name);
         formData.append('price', price);
         formData.append('description', description);
-        formData.append('tags', tags.split(',').map(tag => tag.trim())); // Add this line
+        formData.append('tags', tags.split(',').map(tag => tag.trim()));
 
         fileContainers.forEach((container) => {
             if (container.selectedImage) {
@@ -64,6 +68,7 @@ const AdminPage = () => {
                 setPrice('');
                 setDescription('');
                 setTags('');
+                setSelectedTags([]);
                 setFileContainers([{ id: 1, selectedImage: null, previewUrl: null }]);
             }
         } catch (error) {
@@ -156,15 +161,23 @@ const AdminPage = () => {
                             value={tags}
                             onChange={(e) => setTags(e.target.value)}
                         />
+                        <div className="selected-tags">
+                            {selectedTags.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="tag selected"
+                                    onClick={() => handleTagRemove(tag)}
+                                >
+                                    {tag} &times;
+                                </span>
+                            ))}
+                        </div>
                         <div className="categories">
                             {Object.keys(availableTags).map((category) => (
                                 <span
                                     key={category}
                                     className="category tag"
-                                    onClick={() => {
-                                        handleCategoryClick(category);
-                                        handleTagClick(category);
-                                    }}
+                                    onClick={() => handleCategoryClick(category)}
                                 >
                                     {category}
                                 </span>
@@ -174,7 +187,7 @@ const AdminPage = () => {
                             {currentTags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="tag"
+                                    className={`tag ${selectedTags.includes(tag) ? 'selected' : ''}`}
                                     onClick={() => handleTagClick(tag)}
                                 >
                                     {tag}

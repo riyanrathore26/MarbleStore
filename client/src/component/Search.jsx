@@ -49,7 +49,7 @@ const SearchBar = () => {
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholder="Search Google or type a URL"
+          placeholder="Search..."
           variant="standard"
           fullWidth
           InputProps={{ disableUnderline: true }}
