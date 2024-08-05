@@ -27,7 +27,7 @@ function Homepage() {
         <SwiperSlide><div className='sliderbox'>k</div></SwiperSlide>
       </Swiper>
       </div>
-      <SearchBar/>
+      <SearchBar/>/
       <Productpage showsomething={false} />
       <div className="categoriesContainer">
         <MultiCarousel/>

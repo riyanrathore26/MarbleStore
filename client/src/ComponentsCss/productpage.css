@@ -1,0 +1,105 @@
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .product-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .images-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .images-container img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .product-details h2 {
+    margin: 10px 0;
+  }
+  
+  .product-details p {
+    margin: 5px 0;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-edit {
+    background-color: #007bff;
+    color: white;
+    margin-right: 10px;
+  }
+  
+  .button-delete {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .button:hover {
+    opacity: 0.8;
+  }
+  
+  .product-edit-form input,
+  .product-edit-form textarea {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .image-edit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .image-edit-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .image-edit-item input {
+    flex: 1;
+  }
+  
+  .product-edit-form button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .product-edit-form button:last-child {
+    background-color: #6c757d;
+  }
+  
+  .product-edit-form button:hover {
+    opacity: 0.8;
+  }
+.buttons{
+    display: flex;
+    
+}  

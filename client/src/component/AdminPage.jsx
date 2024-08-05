@@ -3,7 +3,6 @@ import { BASE_URL } from '../config';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../ComponentsCss/AdminPage.css';
 import ApageProduct from './ApageProduct';
 
 const AdminPage = () => {
@@ -34,6 +33,7 @@ const AdminPage = () => {
     const handleCategoryClick = (category) => {
         setCurrentTags(availableTags[category]);
     };
+
     const handleTagClick = (tag) => {
         setTags((prevTags) => (prevTags ? `${prevTags}, ${tag}` : tag));
     };
@@ -84,94 +84,110 @@ const AdminPage = () => {
         setFileContainers([...fileContainers, newContainer]);
     };
 
+    const handleRemoveImage = (containerId) => {
+        setFileContainers((prevContainers) =>
+            prevContainers.map((container) =>
+                container.id === containerId ? { ...container, selectedImage: null, previewUrl: null } : container
+            )
+        );
+    };
+
     return (
-        <div className="admin-container">
-            <h1>Add Information About Product</h1>
-            <div>
+        <div className='father'>
+            <div className="admin-container">
+                <h1>Add Information About Product</h1>
                 <div>
-                    {fileContainers.map((container) => (
-                        <div key={container.id} className="file-input-container">
-                            <input
-                                type="file"
-                                id={`file-input-${container.id}`}
-                                accept="image/*"
-                                onChange={(event) => handleImageChange(event, container.id)}
-                            />
-                            <label htmlFor={`file-input-${container.id}`}>
-                                <i className="fas fa-upload"></i> Choose Image
-                            </label>
-                            {container.previewUrl && (
-                                <img
-                                    src={container.previewUrl}
-                                    alt="Selected"
-                                    style={{ width: '100px', height: '100px', marginLeft: '10px' }}
-                                />
-                            )}
+                    <div className='Admin_div'>
+                        {fileContainers.map((container) => (
+                            <div key={container.id} className="file-input-container">
+                                {!container.previewUrl && (
+                                    <div>
+                                        <input
+                                            type="file"
+                                            id={`file-input-${container.id}`}
+                                            accept="image/*"
+                                            onChange={(event) => handleImageChange(event, container.id)}
+                                        />
+                                        <label htmlFor={`file-input-${container.id}`}>
+                                            <i className="fas fa-upload">Choose Image</i>
+                                        </label>
+                                    </div>
+                                )}
+                                {container.previewUrl && (
+                                    <div className='selected_img'>
+                                        <img
+                                            src={container.previewUrl}
+                                            alt="Selected"
+                                        />
+                                        <i className="fas fa-close" onClick={() => handleRemoveImage(container.id)}> X </i>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        <button className="add-image-button" onClick={handleAddContainer}>
+                            <i className="fas fa-plus">Add Image</i>
+                        </button>
+                    </div>
+                    <div>
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
+                        <label htmlFor="price">Price:</label>
+                        <input
+                            type="text"
+                            id="price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                        />
+                        <label htmlFor="description">Description:</label>
+                        <textarea
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                        <label htmlFor="tags">Tags (comma separated):</label>
+                        <input
+                            type="text"
+                            id="tags"
+                            value={tags}
+                            onChange={(e) => setTags(e.target.value)}
+                        />
+                        <div className="categories">
+                            {Object.keys(availableTags).map((category) => (
+                                <span
+                                    key={category}
+                                    className="category tag"
+                                    onClick={() => {
+                                        handleCategoryClick(category);
+                                        handleTagClick(category);
+                                    }}
+                                >
+                                    {category}
+                                </span>
+                            ))}
                         </div>
-                    ))}
-                    <button className="add-image-button" onClick={handleAddContainer}>
-                        <i className="fas fa-plus"></i> Add Image
-                    </button>
-                </div>
-                <div>
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <label htmlFor="price">Price:</label>
-                    <input
-                        type="text"
-                        id="price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                    />
-                    <label htmlFor="description">Description:</label>
-                    <textarea
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <label htmlFor="tags">Tags (comma separated):</label>
-                    <input
-                        type="text"
-                        id="tags"
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                    />
-                    <div className="categories">
-                        {Object.keys(availableTags).map((category) => (
-                            <span
-                                key={category}
-                                className="category tag"
-                                onClick={() => {
-                                    handleCategoryClick(category);
-                                    handleTagClick(category);
-                                }}
-                            >
-                                {category}
-                            </span>
-                        ))}
+                        <div className="tag-suggestions">
+                            {currentTags.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="tag"
+                                    onClick={() => handleTagClick(tag)}
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                        <button className="submit-button" onClick={handleSubmit}>
+                            Submit
+                        </button>
                     </div>
-                    <div className="tag-suggestions">
-                        {currentTags.map((tag) => (
-                            <span
-                                key={tag}
-                                className="tag"
-                                onClick={() => handleTagClick(tag)}
-                            >
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
-                    <button className="submit-button" onClick={handleSubmit}>
-                        Submit
-                    </button>
                 </div>
+                <ToastContainer />
             </div>
-            <ToastContainer />
             <ApageProduct />
         </div>
     );

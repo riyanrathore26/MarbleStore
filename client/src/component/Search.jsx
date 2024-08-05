@@ -1,82 +1,76 @@
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import axios from 'axios';
-import { BASE_URL } from '../config'; // Ensure BASE_URL is correctly defined in your config file
+import React, { useState, useEffect } from 'react';
+import { TextField, IconButton, List, ListItem, ListItemText } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import MicIcon from '@mui/icons-material/Mic';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 
 const SearchBar = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [noResults, setNoResults] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const quickcloseHandler = () => {
-    setNoResults(false);
-    setSearchResults([])
-  }
+  useEffect(() => {
+    const savedHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+    setHistory(savedHistory);
+  }, []);
 
-  const handleSearch = async (event) => {
-    event.preventDefault();
-    const searchTerm = event.target.search.value;
+  const handleSearch = () => {
+    if (searchTerm.trim() === '') return;
 
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/api/search`,
-        { searchTerm } // Correctly send the searchTerm in the body
-      );
+    const newHistory = [searchTerm, ...history.filter(item => item !== searchTerm)];
+    setHistory(newHistory);
+    localStorage.setItem('searchHistory', JSON.stringify(newHistory));
+    setSearchTerm('');
+  };
 
-      if (response.status === 200) {
-        if (response.data.length === 0) {
-          setNoResults(true);
-          setSearchResults([]);
-        } else {
-          setNoResults(false);
-          setSearchResults(response.data); // Update search results state with the data
-        }
-      } else {
-        alert('not working');
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 404) {
-        setNoResults(true);
-        setSearchResults([]);
-      } else {
-        console.log(err);
-      }
-    }
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleFocus = () => {
+    setShowHistory(true);
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => setShowHistory(false), 200); // delay to allow click on dropdown items
+  };
+
+  const handleHistoryClick = (item) => {
+    setSearchTerm(item);
+    handleSearch();
   };
 
   return (
-    <div>
-      <div className="search-bar-container">
-        <form onSubmit={handleSearch} className="search-form">
-          <input
-            type="text"
-            name="search"
-            placeholder="Search what you want"
-            className="search-input"
-          />
-          <button type="submit" className="search-button">
-            <FaSearch />
-          </button>
-        </form>
+    <div style={{ position: 'relative', width: '100%', maxWidth: '600px', margin: 'auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: 'white', borderRadius: '24px', padding: '4px 8px', boxShadow: '0 1px 6px rgba(32,33,36,0.28)' }}>
+        <SearchIcon style={{ color: '#9aa0a6' }} />
+        <TextField
+          value={searchTerm}
+          onChange={handleInputChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder="Search Google or type a URL"
+          variant="standard"
+          fullWidth
+          InputProps={{ disableUnderline: true }}
+          style={{ marginLeft: '8px' }}
+        />
+        <IconButton>
+          <MicIcon />
+        </IconButton>
+        <IconButton>
+          <ImageSearchIcon />
+        </IconButton>
       </div>
-
-      {/* Display search results */}
-      <div className="search-results">
-        <button onClick={quickcloseHandler} style={{ position: 'absolute', cursor: 'pointer' }}>
-          X
-        </button>
-        {noResults ? (
-          <p>No results found</p>
-        ) : (
-          searchResults.map((product) => (
-            <div key={product._id} className="product-item">
-              <img src={product.images[0]} alt={product.name} />
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <p>Price: {product.price}</p>
-            </div>
-          ))
-        )}
-      </div>
+      {showHistory && history.length > 0 && (
+        <List style={{ position: 'absolute', top: '100%', left: 0, right: 0, backgroundColor: 'white', borderRadius: '0 0 24px 24px', boxShadow: '0 1px 6px rgba(32,33,36,0.28)', zIndex: 1000 }}>
+          {history.map((item, index) => (
+            <ListItem button key={index} onClick={() => handleHistoryClick(item)}>
+              <ListItemText primary={item} />
+            </ListItem>
+          ))}
+        </List>
+      )}
     </div>
   );
 };
