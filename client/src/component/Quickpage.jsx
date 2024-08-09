@@ -44,7 +44,6 @@ export default function Quickpage() {
 
   return (
     <div>
-      <h1>{productData.name}</h1>
       <Gallery productData={productImages} />
       <br />
       <div className="description">

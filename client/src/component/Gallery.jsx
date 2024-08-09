@@ -1,43 +1,60 @@
 import React, { useState } from 'react';
 import '../ComponentsCss/Gallery.css';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 export default function Gallery({ productData }) {
-  const images =  productData;
+  const images = productData;
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [currentSet, setCurrentSet] = useState(0);
+  const imagesPerPage = 4;
+  const totalPages = Math.ceil(images.length / imagesPerPage);
 
-  const handleNext = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex < images.length - 1 ? prevIndex + 1 : prevIndex
-    );
+  const handleNextSet = () => {
+    setCurrentSet((prevSet) => (prevSet < totalPages - 1 ? prevSet + 1 : prevSet));
   };
 
-  const handlePrevious = () => {
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : prevIndex
-    );
+  const handlePreviousSet = () => {
+    setCurrentSet((prevSet) => (prevSet > 0 ? prevSet - 1 : prevSet));
   };
+
+  const handleMouseEnter = (index) => {
+    setSelectedImageIndex(index);
+  };
+
+  const startIndex = currentSet * imagesPerPage;
+  const endIndex = startIndex + imagesPerPage;
+  const visibleImages = images.slice(startIndex, endIndex);
 
   return (
     <div className="gallery">
+      <div className="thumbnail-row">
+        <div className="thumbnails">
+          {visibleImages.map((src, index) => (
+            <div
+              key={startIndex + index}
+              className={`thumbnail ${startIndex + index === selectedImageIndex ? 'active' : ''}`}
+              onMouseEnter={() => handleMouseEnter(startIndex + index)}
+            >
+              <img src={src} alt={`thumbnail-${startIndex + index}`} />
+            </div>
+          ))}
+        </div>
+        {images.length > imagesPerPage && (
+          <div className="buttons_of_gallery">
+            <button className="nav-button" onClick={handlePreviousSet} disabled={currentSet === 0}>
+              <FaAngleLeft />
+            </button>
+            <button className="nav-button" onClick={handleNextSet} disabled={currentSet === totalPages - 1}>
+              <FaAngleRight />
+            </button>
+          </div>
+        )}
+      </div>
       <div className="big-image">
         <img src={images[selectedImageIndex]} alt="big" />
       </div>
-      <div className="thumbnail-row">
-        <button className="nav-button" onClick={handlePrevious} disabled={selectedImageIndex === 0}>
-          Pre
-        </button>
-        {images.map((src, index) => (
-          <div 
-            key={index} 
-            className={`thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
-            onClick={() => setSelectedImageIndex(index)}
-          >
-            <img src={src} alt={`thumbnail-${index}`} />
-          </div>
-        ))}
-        <button className="nav-button" onClick={handleNext} disabled={selectedImageIndex === images.length - 1}>
-          Next
-        </button>
+      <div className="related_product">
+        
       </div>
     </div>
   );

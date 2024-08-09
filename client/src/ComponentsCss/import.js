@@ -11,3 +11,4 @@ import './QandA.css';
 import './Gallery.css';
 import './Search.css';
 import './productpage.css';
+import './Chat.css';

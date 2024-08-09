@@ -1,0 +1,43 @@
+
+  /* src/ChatIcon.css */
+  .chat-icon {
+    width: 60px;
+    height: 60px;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  /* src/ChatWindow.css */
+  .chat-window-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  
+  .chat-window {
+    padding: 20px;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  .chat-content {
+    margin-top: 40px;
+  }
+  
