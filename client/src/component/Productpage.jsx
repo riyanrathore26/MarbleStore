@@ -71,7 +71,7 @@ function Productpage(props) {
         {products.map((product) => (
           <div className="productbox" key={product.id}>
             <div className="waicon">
-              <a href={`http://wa.me/your-whatsapp-number?text=I'm interested in ${product.name}`} target="_blank" rel="noreferrer">
+              <a href={`http://wa.me/+916378948871?text=I'm interested in ${product.name}`} target="_blank" rel="noreferrer">
                 <FaWhatsapp className="whatsapp-icon" style={{ color: 'green', fontSize: '30px' }} />
               </a>
             </div>

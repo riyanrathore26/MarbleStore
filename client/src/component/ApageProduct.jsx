@@ -3,11 +3,35 @@ import { BASE_URL } from '../config';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import availableTags from './availableTags';
 import { FaTrashAlt } from 'react-icons/fa';
 
 export default function ApageProduct() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [currentTags, setCurrentTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tags, setTags] = useState('');
+
+
+
+  const handleCategoryClick = (category) => {
+    setCurrentTags(availableTags[category]);
+  };
+
+  const handleTagClick = (tag) => {
+    if (!selectedTags.includes(tag)) {
+      setSelectedTags([...selectedTags, tag]);
+      setTags((prevTags) => (prevTags ? `${prevTags}, ${tag}` : tag));
+    }
+  };
+
+  const handleTagRemove = (tagToRemove) => {
+    setSelectedTags(selectedTags.filter((tag) => tag !== tagToRemove));
+    setTags(tags.split(',').filter((tag) => tag.trim() !== tagToRemove).join(', '));
+  };
+
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,7 +63,6 @@ export default function ApageProduct() {
       toast.error('Error deleting product!');
     }
   };
-
   const handleSaveChanges = async () => {
     try {
       const formData = new FormData();
@@ -49,27 +72,45 @@ export default function ApageProduct() {
       editingProduct.images.forEach((image, index) => {
         formData.append(`images[${index}]`, image);
       });
-
+  
       const response = await fetch(`${BASE_URL}/api/updateProduct/${editingProduct._id}`, {
         method: 'PUT',
         body: formData,
       });
-      const data = await response.json();
+  
+      const contentType = response.headers.get('Content-Type');
+      let data;
+  
+      // Check if the response is JSON
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Handle plain text response
+        const responseText = await response.text();
+        console.log('Non-JSON response:', responseText);
+        
+        // Assuming a successful plain text response would be something like "Product updated successfully!"
+        if (responseText.includes('Product updated successfully!')) {
+          data = { success: true, message: responseText };
+        } else {
+          data = { success: false, message: responseText };
+        }
+      }
+  
       if (data.success) {
-        // Update product list after saving changes
         setProducts(products.map((product) => (product._id === editingProduct._id ? editingProduct : product)));
-        setEditingProduct(null); // Clear editing state
-        toast.success('Product updated successfully!');
+        setEditingProduct(null);
+        toast.success(data.message || 'Product updated successfully!');
       } else {
         console.error('Error updating product:', data.message);
-        toast.error('Error updating product!');
+        toast.error(data.message || 'Error updating product!');
       }
     } catch (error) {
       console.error('Error updating product:', error);
       toast.error('Error updating product!');
     }
   };
-
+      
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditingProduct({ ...editingProduct, [name]: value });
@@ -126,12 +167,52 @@ export default function ApageProduct() {
                   onChange={handleChange}
                   placeholder="Product Price"
                 />
+                <div className="selected-tags">
+                <input
+                  type="text"
+                  id="tags"
+                  value={product.tags}
+                  onChange={(e) => setTags(e.target.value)}
+                />
+                  {selectedTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="tag selected"
+                      onClick={() => handleTagRemove(tag)}
+                    >
+                      {tag} &times;
+                    </span>
+                  ))}
+                </div>
                 <textarea
                   name="description"
                   value={editingProduct.description}
                   onChange={handleChange}
                   placeholder="Product Description"
                 />
+                <div className="categories">
+                  {Object.keys(availableTags).map((category) => (
+                    <span
+                      key={category}
+                      className="category tag"
+                      onClick={() => handleCategoryClick(category)}
+                    >
+                      {category}
+                    </span>
+                  ))}
+                </div>
+                <div className="tag-suggestions">
+                  {currentTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className={`tag ${selectedTags.includes(tag) ? 'selected' : ''}`}
+                      onClick={() => handleTagClick(tag)}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
                 <div className="image-edit-section">
                   {editingProduct.images.map((image, index) => (
                     <div key={index} className="image-edit-item">
@@ -147,14 +228,14 @@ export default function ApageProduct() {
                       />
                     </div>
                   ))}
-                  {editingProduct.images.length < 5 && (
-                    <button onClick={handleAddImage}>Add Another Image</button>
-                  )}
                   {editingProduct.images.length > 0 && editingProduct.images[editingProduct.images.length - 1] === '' && (
                     <input
                       type="file"
                       onChange={(e) => handleImageUpload(e, editingProduct.images.length - 1)}
                     />
+                  )}
+                  {editingProduct.images.length < 5 && (
+                    <button onClick={handleAddImage}>Add Another Image</button>
                   )}
                   <br />
                 </div>
