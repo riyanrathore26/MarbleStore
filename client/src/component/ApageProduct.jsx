@@ -9,6 +9,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 export default function ApageProduct() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [newImages, setNewImages] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState('');
@@ -63,14 +64,32 @@ export default function ApageProduct() {
       toast.error('Error deleting product!');
     }
   };
+  const handleImageUpload = (e, index) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const newImagesArray = [...newImages];
+        newImagesArray[index] = file; // Store the file object instead of base64 data
+        setNewImages(newImagesArray);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const handleSaveChanges = async () => {
     try {
       const formData = new FormData();
       formData.append('name', editingProduct.name);
       formData.append('price', editingProduct.price);
       formData.append('description', editingProduct.description);
-      editingProduct.images.forEach((image, index) => {
-        formData.append(`images[${index}]`, image);
+      formData.append('tags', tags.split(',').map(tag => tag.trim()));
+  
+      // Add existing images as a JSON string
+      formData.append('existingImages', JSON.stringify(editingProduct.images));
+  
+      // Add new images to FormData
+      newImages.forEach((image) => {
+        formData.append('newImages', image); // Match this with Multer's expected field name
       });
   
       const response = await fetch(`${BASE_URL}/api/updateProduct/${editingProduct._id}`, {
@@ -78,39 +97,22 @@ export default function ApageProduct() {
         body: formData,
       });
   
-      const contentType = response.headers.get('Content-Type');
-      let data;
-  
-      // Check if the response is JSON
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        // Handle plain text response
-        const responseText = await response.text();
-        console.log('Non-JSON response:', responseText);
-        
-        // Assuming a successful plain text response would be something like "Product updated successfully!"
-        if (responseText.includes('Product updated successfully!')) {
-          data = { success: true, message: responseText };
-        } else {
-          data = { success: false, message: responseText };
-        }
-      }
-  
-      if (data.success) {
-        setProducts(products.map((product) => (product._id === editingProduct._id ? editingProduct : product)));
+      const data = await response.json();
+      if (response.ok) {
+        setProducts(products.map(product => product._id === editingProduct._id ? editingProduct : product));
         setEditingProduct(null);
-        toast.success(data.message || 'Product updated successfully!');
+        setNewImages([]); // Clear new images
+        toast.success('Product updated successfully!');
       } else {
-        console.error('Error updating product:', data.message);
-        toast.error(data.message || 'Error updating product!');
+        toast.error('Error updating product!');
       }
     } catch (error) {
       console.error('Error updating product:', error);
       toast.error('Error updating product!');
     }
   };
-      
+    
+    
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditingProduct({ ...editingProduct, [name]: value });
@@ -129,19 +131,6 @@ export default function ApageProduct() {
   const handleRemoveImage = (index) => {
     const newImages = editingProduct.images.filter((_, i) => i !== index);
     setEditingProduct({ ...editingProduct, images: newImages });
-  };
-
-  const handleImageUpload = (e, index) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const newImages = [...editingProduct.images];
-        newImages[index] = reader.result;
-        setEditingProduct({ ...editingProduct, images: newImages });
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   return (
