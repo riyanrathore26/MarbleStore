@@ -17,7 +17,6 @@ router.post('/addProduct', upload.array('images', 13), async (req, res) => {
       }
       return null;
     }))).flat();
-
     const newProduct = new Post({
       name,
       description,
@@ -28,7 +27,7 @@ router.post('/addProduct', upload.array('images', 13), async (req, res) => {
 
     await newProduct.save();
     console.log("product added");
-    res.status(201).send('Product added successfully!');
+    res.status(200).json({ message: 'product added' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -67,19 +66,30 @@ router.post('/api/search', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// Update product route
-router.put('/updateProduct/:id', upload.array('images', 13), async (req, res) => {
+router.put('/updateProduct/:id', upload.array('newImages', 13), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, images } = req.body;
-    const imagePaths = images ? [...images] : [];
-    console.log("id",id,"name",name,"description",description,"price",price,"images",imagePaths);
+    const { name, description,tags, price, existingImages } = req.body;
+    // Parse existing images from JSON string
+    const existingImagesArray = JSON.parse(existingImages || '[]');
+
+    // Upload new images to S3
+    const newImagePaths = await Promise.all(req.files.map(async (file) => {
+      if (file && file.originalname) {
+        const result = await uploadToS3(file);
+        return result.Location;
+      }
+      return null;
+    }));
+
+    // Combine old and new images
+    const allImages = [...existingImagesArray, ...newImagePaths.filter(Boolean)];
     const updatedProduct = {
       name,
       description,
       price,
-      images: imagePaths,
+      images: allImages,
+      tags:tags,
     };
 
     const result = await Post.findByIdAndUpdate(id, updatedProduct, { new: true });
@@ -88,7 +98,7 @@ router.put('/updateProduct/:id', upload.array('images', 13), async (req, res) =>
       return res.status(404).send('Product not found');
     }
 
-    res.status(200).send('Product updated successfully!');
+    res.status(200).json({ message: 'product added' });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
