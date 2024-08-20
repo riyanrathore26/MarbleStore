@@ -1,16 +1,24 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
+const Post = require('../Models/product'); // Assuming the model is named 'Post'
 
-// router.post('/api/search', async (req, res) => {
-//   try {
-//     console.log("jio");
-//     const { searchTerm } = req.body;
-//     console.log(searchTerm);
-//     res.json({ searchTerm });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
+router.post('/search', async (req, res) => {
+  try {
+    const { searchTerm } = req.body;
 
-// module.exports = router;
+    // Query the database to find matching products
+    const filteredProducts = await Post.find({
+      $or: [
+        { name: { $regex: searchTerm, $options: 'i' } }, // 'i' makes it case-insensitive
+        { description: { $regex: searchTerm, $options: 'i' } }
+      ]
+    });
+
+    res.json({ results: filteredProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+module.exports = router;

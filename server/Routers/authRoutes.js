@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { cognito } = require('../config/awsConfig');
+const addtocart  = require('../Models/addtocart');
 
 router.post('/signup', async (req, res) => {
   const { username, password, email } = req.body;
@@ -59,6 +60,24 @@ router.post('/login', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+router.post('/addtocart/:id', async (req, res) => {
+  const id = req.params.id;
+  const user_email = 'rk5098863@gmail.com';
+
+  const newProduct = new addtocart({
+    product_id: id,
+    user_email: user_email
+  });
+
+  try {
+    await newProduct.save();
+    console.log("Product added");
+    res.status(200).send("Product added to cart successfully");  // Send a success response
+  } catch (error) {
+    console.log("Error adding product to cart:", error);
+    res.status(500).send("Failed to add product to cart");  // Send a failure response
   }
 });
 

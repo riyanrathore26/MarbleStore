@@ -54,6 +54,37 @@ router.get('/fetchone/:id', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+router.get('/fetchsimilar/:tags/:id', async (req, res) => {
+  try {
+    const tags = req.params.tags.split(',');
+    const id = req.params.id;  // The ID to exclude from the results
+
+    let info = [];
+    let productSet = new Set();  // Set to keep track of unique products
+
+    for (let index = 0; index < tags.length; index++) {
+      const element = tags[index];
+
+      // Find products with tags matching the current tag
+      const data = await Post.find({ tags: { $regex: element, $options: "i" } });
+
+      // Iterate over the found products
+      data.forEach((product) => {
+        // Exclude the product with the same ID as the one passed in params
+        if (product._id.toString() !== id && !productSet.has(product._id.toString())) {
+          productSet.add(product._id.toString());  // Add product ID to the set
+          info.push(product);  // Add the product to the response array
+        }
+      });
+    }
+
+    res.status(200).json(info);  // Send the filtered products
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 router.post('/api/search', async (req, res) => {
   try {
