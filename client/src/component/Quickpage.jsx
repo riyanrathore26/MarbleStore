@@ -3,7 +3,8 @@ import { useLocation } from "react-router-dom";
 import Comments from "./Comments";
 import Footer from "./Footer";
 import { BASE_URL } from '../config';
-import Gallery from './Gallery'
+import Gallery from './Gallery';
+import Microproduct from "./Microproduct";
 
 
 export default function Quickpage() {
@@ -40,22 +41,15 @@ export default function Quickpage() {
   }
 
   // Access product images and other data from productData object (assuming structure)
-  const productImages = productData.images || []; // Default to empty array if images not present
+  const productImages = productData.images || [];
+  const productTags = productData.tags
 
   return (
     <div>
-      <Gallery productData={productImages} />
+      <Gallery productData={productImages} productInfo = {productData} />
       <br />
-      <div className="description">
-        <h2>All About Product</h2>
-        <p style={{
-          border: "2px solid black",
-          margin: "18px 70px",
-          borderRadius: "10px",
-          padding: "13px",
-        }}>{productData?.description || "No description available."}</p>
-
-      </div>
+      <Microproduct productTags={productTags} productId={productId}/>
+      <br />
       <Comments productId={productId} />
       <Footer />
     </div>

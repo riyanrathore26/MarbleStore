@@ -1,44 +1,60 @@
-.search-container {
+/* Container for the search bar and results */
+.search-bar-container {
   position: relative;
   width: 100%;
   max-width: 600px;
   margin: auto;
 }
 
+/* Search bar styling */
 .search-bar {
   display: flex;
   align-items: center;
   background-color: white;
   border-radius: 24px;
   padding: 4px 8px;
-  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+  box-shadow: 0 1px 6px rgba(32,33,36,0.28);
 }
 
+/* Search icon inside the bar */
 .search-icon {
   color: #9aa0a6;
 }
 
-.search-input {
-  margin-left: 8px;
-  flex-grow: 1;
-}
-
-.history-list {
+/* Search results styling */
+.search-results {
   position: absolute;
-  top: 100%;
+  top: 50px;
   left: 0;
   right: 0;
+  z-index: 1100;
   background-color: white;
-  border-radius: 0 0 24px 24px;
-  box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-  z-index: 1000;
+  border-radius: 24px;
+  box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-.history-item {
-  padding: 8px 16px;
+/* Search results close button */
+.close-results {
+  float: right;
+}
+
+/* Individual search result item */
+.searchResult {
   cursor: pointer;
 }
 
-.history-item:hover {
-  background-color: #f1f3f4;
+/* Image in search results */
+.result-image {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 4px;
+}
+
+/* Results list header */
+.results-list {
+  padding-top: 10px;
 }

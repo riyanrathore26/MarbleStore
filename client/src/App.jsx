@@ -37,7 +37,7 @@ function App() {
     },
     {
       path: "/Product",
-      element: <><Navbar/><Productpage showsomething={true} /></>,
+      element: <><Navbar /><Productpage showsomething={true} /></>, // Show all products on this page
     },    
     {
       path: "/Footer",

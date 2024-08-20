@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import '../ComponentsCss/Gallery.css';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { BASE_URL } from '../config';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function Gallery({ productData }) {
+export default function Gallery({ productData, productInfo }) {
   const images = productData;
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [currentSet, setCurrentSet] = useState(0);
@@ -19,6 +23,23 @@ export default function Gallery({ productData }) {
 
   const handleMouseEnter = (index) => {
     setSelectedImageIndex(index);
+  };
+
+  const addtocart = async (id) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/addtocart/${id}`);
+      if (response.status === 200) {
+        toast.success('Product added to cart successfully!', {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      toast.error('Failed to add product to cart. Please try again.', {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 3000,
+      });
+    }
   };
 
   const startIndex = currentSet * imagesPerPage;
@@ -50,12 +71,21 @@ export default function Gallery({ productData }) {
           </div>
         )}
       </div>
-      <div className="big-image">
-        <img src={images[selectedImageIndex]} alt="big" />
+      <div className="ultra-big">
+        <div className="big-image">
+          <img src={images[selectedImageIndex]} alt="big" />
+        </div>
       </div>
-      <div className="related_product">
-        
+      <div className="information">
+        <h2>{productInfo.name}</h2>
+        <h2>{productInfo.price}</h2>
+        <div className="btn">
+          <button>Buy</button>
+          <h3>or</h3>
+          <button onClick={() => addtocart(productInfo._id)}>Add to cart</button>
+        </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

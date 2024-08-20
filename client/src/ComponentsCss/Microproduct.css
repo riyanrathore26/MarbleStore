@@ -1,0 +1,52 @@
+.microproduct-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading {
+  font-size: 18px;
+  color: #555;
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.product-name {
+  font-size: 20px;
+  color: #333;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #777;
+}
+
+.fallback-content {
+  text-align: center;
+}

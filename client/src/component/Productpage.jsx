@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaHeart, FaAngleLeft, FaWhatsapp, FaAngleRight } from 'react-icons/fa';
-import { IoCartOutline } from "react-icons/io5";
-import { BiBracket } from "react-icons/bi";
+import { FaAngleLeft, FaWhatsapp, FaAngleRight } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
 
@@ -18,10 +16,12 @@ function Productpage(props) {
         const response = await fetch(`${BASE_URL}/api/showProduct`); // Replace with your actual API endpoint
         const data = await response.json();
         if (!randomshow) {
-          const randomProducts = data.slice(); // Create a copy to avoid mutating original data
-          if (randomProducts.length >= 6) {
+          const randomProducts = [...data]; // Create a copy to avoid mutating the original data
+          if (randomProducts.length >= 3) {
             randomProducts.sort(() => Math.random() - 0.5); // Shuffle the array randomly
-            setProducts(randomProducts.slice(0, 6)); // Select the top 5 shuffled elements
+            setProducts(randomProducts.slice(0, 3)); // Select the top 3 shuffled elements
+          } else {
+            setProducts(randomProducts);
           }
         } else {
           setProducts(data);
@@ -40,7 +40,7 @@ function Productpage(props) {
 
   const showbig = (id) => {
     setshowbigimg(id);
-  }
+  };
 
   const next = (productId) => {
     const currentIndex = indexMap[productId] || 0;
@@ -69,7 +69,7 @@ function Productpage(props) {
     <div>
       <div className="productpage">
         {products.map((product) => (
-          <div className="productbox" key={product.id}>
+          <div className="productbox" key={product._id}>
             <div className="waicon">
               <a href={`http://wa.me/+916378948871?text=I'm interested in ${product.name}`} target="_blank" rel="noreferrer">
                 <FaWhatsapp className="whatsapp-icon" style={{ color: 'green', fontSize: '30px' }} />
@@ -99,7 +99,7 @@ function Productpage(props) {
           </div>
         )
       }
-    </div >
+    </div>
   );
 }
 
