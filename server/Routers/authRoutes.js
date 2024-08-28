@@ -7,11 +7,12 @@ const User = require('../Models/userinfo');
 
 // Set AWS region (remove this from the params object)
 AWS.config.update({
-  region: process.env.AWS_REGION || 'ap-south-1', // Default to 'us-east-1' if AWS_REGION is not set
+  region: process.env.AWS_REGION || 'ap-south-1',
 });
 
 router.post('/signup', async (req, res) => {
-  const { username, PhoneNumber, password, email } = req.body;
+  const { username, email, password, PhoneNumber } = req.body;
+  console.log(username, email, password, PhoneNumber );
   const params = {
     ClientId: process.env.AWS_CLIENT_ID,
     Username: email,
@@ -19,7 +20,7 @@ router.post('/signup', async (req, res) => {
     UserAttributes: [
       { Name: 'email', Value: email },
       { Name: 'name', Value: username },
-      { Name: 'phone_number', Value: PhoneNumber } // Corrected this key to 'phone_number'
+      { Name: 'phone_number', Value: PhoneNumber }
     ]
   };
 
