@@ -1,60 +1,83 @@
-import React, { useRef, useState } from 'react';
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-import Footer from './Footer';
-import QuestionAnswerDropdown from './QuestionAnswerDropdown'
-import Productpage from './Productpage';
-// import ChatIcon from './ChatIcon';
-// import { useSpring, animated } from '@react-spring/web';
-// import ChatWindow from './ChatWindow';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-
-
-// import required modules
-import { Navigation } from 'swiper/modules';
+import { FaAngleLeft, FaWhatsapp, FaAngleRight } from 'react-icons/fa';
+import QuestionAnswerDropdown from './QuestionAnswerDropdown';
+import React, { useEffect, useState } from 'react';
 import MultiCarousel from './MultiCarousel';
+import Productpage from './Productpage';
+import { BASE_URL } from '../config';
 import SearchBar from './Search';
-
+import Footer from './Footer';
+import axios from 'axios';
 
 function Homepage() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [homeposter, setHomePoster] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // const toggleChat = () => {
-  //   setIsOpen(!isOpen);
-  // };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(`${BASE_URL}/api/homeposter`);
+        setHomePoster(response.data.poster); // Assuming response.data.poster is the array
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  // const chatAnimation = useSpring({
-  //   opacity: isOpen ? 1 : 0,
-  //   transform: isOpen ? `translateY(0)` : `translateY(100%)`,
-  // });
+    fetchData();
+  }, []);
+
+  // Auto slide every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 3000);
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [homeposter.length]);
+
+  // Function to go to the next slide
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % homeposter.length);
+  };
+
+  // Function to go to the previous slide
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? homeposter.length - 1 : prevIndex - 1
+    );
+  };
 
   return (
     <>
-    <div className="firsthome">
-      <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
-        <SwiperSlide><div className='sliderbox'>k</div></SwiperSlide>
-        <SwiperSlide><div className='sliderbox'>k</div></SwiperSlide>
-        <SwiperSlide><div className='sliderbox'>k</div></SwiperSlide>
-        <SwiperSlide><div className='sliderbox'>k</div></SwiperSlide>
-      </Swiper>
+      <div className="firsthome">
+        <div className="home_poster" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+          {homeposter.map((poster, index) => (
+            <div
+              key={index}
+              style={{
+                display: index === currentIndex ? 'block' : 'none',
+                transition: 'opacity 0.5s ease-in-out',
+                width: '100%',
+              }}
+            >
+              <img src={poster} alt={`Poster ${index}`} style={{ width: '100%' }} />
+            </div>
+          ))}
+          <div className="button-container">
+            <button onClick={prevSlide}>
+              <FaAngleLeft />
+            </button>
+            <button onClick={nextSlide}>
+              <FaAngleRight />
+            </button>
+          </div>
+        </div>
       </div>
-      <SearchBar/>
-      {/* <ChatIcon onClick={toggleChat} />
-      <animated.div style={chatAnimation} className="chat-window-container">
-        <ChatWindow onClose={toggleChat} />
-      </animated.div>       */}
+      <SearchBar />
       <Productpage showsomething={false} />
       <div className="categoriesContainer">
-        <MultiCarousel/>
-        <QuestionAnswerDropdown/>
-      <Footer></Footer>
+        <MultiCarousel />
+        <QuestionAnswerDropdown />
+        <Footer />
       </div>
     </>
-
-  )
+  );
 }
 
-export default Homepage
+export default Homepage;
