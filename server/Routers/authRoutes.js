@@ -2,27 +2,45 @@ const express = require('express');
 const router = express.Router();
 const { cognito } = require('../config/awsConfig');
 const addtocart  = require('../Models/addtocart');
+const AWS = require('aws-sdk');
+const User = require('../Models/userinfo');
+
+// Set AWS region (remove this from the params object)
+AWS.config.update({
+  region: process.env.AWS_REGION || 'ap-south-1', // Default to 'us-east-1' if AWS_REGION is not set
+});
 
 router.post('/signup', async (req, res) => {
-  const { username, password, email } = req.body;
+  const { username, PhoneNumber, password, email } = req.body;
   const params = {
     ClientId: process.env.AWS_CLIENT_ID,
     Username: email,
     Password: password,
     UserAttributes: [
       { Name: 'email', Value: email },
-      { Name: 'name', Value:username },
+      { Name: 'name', Value: username },
+      { Name: 'phone_number', Value: PhoneNumber } // Corrected this key to 'phone_number'
     ]
   };
 
+  const newUser = new User({
+    username,
+    PhoneNumber,
+    password,
+    email,
+  });
+
   try {
     const data = await cognito.signUp(params).promise();
+    await newUser.save();
     res.json(data);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });
+
+module.exports = router;
 
 router.post('/verify', async (req, res) => {
   const { email, code } = req.body;

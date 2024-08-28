@@ -5,7 +5,7 @@ const CommentModel = require('../Models/Comment');
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: 'ap-south-1'
+  region: process.env.AWS_REGION,
 };
 
 const S3 = new AWS.S3(awsConfig);

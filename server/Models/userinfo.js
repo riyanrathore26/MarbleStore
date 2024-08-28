@@ -2,13 +2,13 @@ const mongoose= require('mongoose');
 const {Schema}=mongoose;
 
 const UserinfoSchema=new mongoose.Schema({
-    firstname:{type:String,required:true},
-    lastname: {type:String,required:true},
-    age: {type:String,required:true},
-    gender: {type:String,required:true, default:'male'},
-    email: {type:String,required:true},
-    password: {type:String,required:true},
-    contact: {type:String,required:true},
+    firstname:{type:String,required:false},
+    lastname: {type:String,required:false},
+    age: {type:String,required:false},
+    gender: {type:String,required:false, default:'male'},
+    email: {type:String,required:false},
+    password: {type:String,required:false},
+    contact: {type:String,required:false},
     role: { type: String, default: 'user' }, // Default role is user
 })
 
