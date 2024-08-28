@@ -6,6 +6,7 @@ const productRoutes = require('./Routers/productRoutes');
 const SearchRoutes = require('./Routers/SearchRoutes');
 const commentRoutes = require('./Routers/commentRoutes');
 const authRoutes = require('./Routers/authRoutes');
+const webdata = require('./Routers/webdata');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 connectDB();
 
+app.use('/api', webdata);
 app.use('/api', productRoutes);
 app.use('/api', commentRoutes);
 app.use('/api/auth', authRoutes);
