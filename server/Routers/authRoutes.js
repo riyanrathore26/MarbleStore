@@ -1,47 +1,49 @@
 const express = require('express');
 const router = express.Router();
 const { cognito } = require('../config/awsConfig');
-const addtocart  = require('../Models/addtocart');
 const AWS = require('aws-sdk');
 const User = require('../Models/userinfo');
 
-// Set AWS region (remove this from the params object)
+// Explicitly set AWS region globally
 AWS.config.update({
   region: process.env.AWS_REGION || 'ap-south-1',
 });
 
+
 router.post('/signup', async (req, res) => {
-  const { username, email, password, PhoneNumber } = req.body;
-  console.log(username, email, password, PhoneNumber );
+  const { username, email, password, phonenumber } = req.body;
+
+  console.log('Signup Request:', { username, email, password, phonenumber });
+
   const params = {
-    ClientId: process.env.AWS_CLIENT_ID,
+    ClientId: process.env.AWS_CLIENT_ID || 'jr9vl0cjsv7h8liq5tt43r57o',
     Username: email,
     Password: password,
     UserAttributes: [
       { Name: 'email', Value: email },
       { Name: 'name', Value: username },
-      { Name: 'phone_number', Value: PhoneNumber }
+      { Name: 'phone_number', Value: phonenumber }
     ]
   };
 
   const newUser = new User({
     username,
-    PhoneNumber,
+    PhoneNumber: phonenumber,
     password,
     email,
   });
 
   try {
     const data = await cognito.signUp(params).promise();
+    console.log(data);
     await newUser.save();
     res.json(data);
   } catch (err) {
-    console.log(err);
+    console.error('Signup Error:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-module.exports = router;
 
 router.post('/verify', async (req, res) => {
   const { email, code } = req.body;
@@ -64,7 +66,7 @@ router.post('/verify', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log("running...")
+  console.log(email,password);
   const params = {
     AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: process.env.AWS_CLIENT_ID,
@@ -78,6 +80,7 @@ router.post('/login', async (req, res) => {
     const data = await cognito.initiateAuth(params).promise();
     res.json(data);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 });
