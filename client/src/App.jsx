@@ -13,8 +13,7 @@ import {
 } from "react-router-dom";
 import Productpage from './component/Productpage';
 import Footer from './component/Footer';
-import Login from './authComponent/Login';
-import Signup from './authComponent/Signup';
+import Loginsignup from './authComponent/Loginsignup';
 
 
 function App() {
@@ -45,11 +44,11 @@ function App() {
     },
     {
       path: "/Login",
-      element: <><Navbar/><Login/></>
+      element: <><Navbar/><Loginsignup showlogin={true}/></>
     },
     {
       path: "/Signup",
-      element: <><Navbar/><Signup/></>
+      element: <><Navbar/><Loginsignup showlogin={false}/></>
     },
     {
       path: "/",
