@@ -1,7 +1,6 @@
 import './categories.css';
 import './footer.css';
 import './homepage.css';
-import './login.css';
 import './categoriespropage.css'
 import './navbar.css';
 import './product.css';
