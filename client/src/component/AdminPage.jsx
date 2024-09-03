@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ApageProduct from './ApageProduct';
 import availableTags from './availableTags';
+import '../ComponentsCss/AdminPage.css';
 
 const AdminPage = () => {
     const [fileContainers, setFileContainers] = useState([{ id: 1, selectedImage: null, previewUrl: null }]);
@@ -58,7 +59,7 @@ const AdminPage = () => {
         try {
             const response = await axios.post(`${BASE_URL}/api/addProduct`, formData);
 
-            if (response.status === 201) {
+            if (response.status === 200) {
                 toast.success('Product added successfully!', {
                     position: 'top-right',
                     autoClose: 3000,

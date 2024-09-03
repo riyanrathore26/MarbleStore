@@ -136,6 +136,7 @@ const removebg = async (imgUrl, name, index) => {
   formData.append('size', 'auto');
   formData.append('image_url', imgUrl);
 
+  toast.success("Background Removed Successfully you can save changes")
   const response = await fetch('https://api.remove.bg/v1.0/removebg', {
     method: 'POST',
     headers: { 'X-Api-Key': 'jENrBFrn79nxpWVovin37YSF' },
@@ -144,14 +145,11 @@ const removebg = async (imgUrl, name, index) => {
 
   if (response.ok) {
     const rbgResultData = await response.arrayBuffer();
-    console.log("st`1")
     // Convert ArrayBuffer to Blob and File
     const blob = new Blob([rbgResultData], { type: 'image/png' });
     const file = new File([blob], `${name}_${index}.png`, { type: blob.type });
-    console.log("st2")
     // Pass the generated file to handleImageUpload2
     handleImageUpload2([file], index);
-    console.log("st3")
   } else {
     throw new Error(`${response.status}: ${response.statusText}`);
   }
@@ -179,7 +177,7 @@ const removebg = async (imgUrl, name, index) => {
 
   return (
     <div>
-      <ToastContainer /> {/* Toast container for notifications */}
+      <ToastContainer />
       <h1>Products</h1>
       <div className="product-list">
         {products.map((product) => (

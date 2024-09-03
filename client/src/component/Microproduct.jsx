@@ -21,8 +21,6 @@ export default function Microproduct({ productTags, productId }) {
           } else {
             setProductData(data);
           }
-        } else {
-          setError("Failed to fetch data from the server.");
         }
       } catch (error) {
         setError("Error fetching data: " + error.message);
@@ -60,7 +58,6 @@ export default function Microproduct({ productTags, productId }) {
       {/* Show fallback if no products found */}
       {!loading && productData.length === 0 && !error && (
         <div className="fallback-content">
-          <h1>No products available</h1>
           <Productpage showsomething={false} />
         </div>
       )}

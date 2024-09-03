@@ -14,7 +14,8 @@ export default function Comments({ productId }) {
                 const response = await fetch(`${BASE_URL}/api/showcomments/${productId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setComments(data);
+                    data.
+                        setComments(data);
                 } else {
                     console.error("Failed to fetch comments");
                 }
@@ -31,7 +32,7 @@ export default function Comments({ productId }) {
     };
 
     const handleSubmit = async (event) => {
-        const user = localStorage.getItem('firstname');
+        const Useremail = localStorage.getItem('email');
         event.preventDefault();
 
         if (!commentValue) {
@@ -41,7 +42,7 @@ export default function Comments({ productId }) {
             });
             return;
         }
-        if (!user) {
+        if (!Useremail) {
             toast.warn("Please login before submitting.", {
                 position: 'top-center',
                 autoClose: 3000,
@@ -53,7 +54,7 @@ export default function Comments({ productId }) {
             const response = await fetch(`${BASE_URL}/api/addcomment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ productId, comment: commentValue, username: user }),
+                body: JSON.stringify({ productId, comment: commentValue, Useremail: Useremail }),
             });
 
             if (response.ok) {
@@ -83,7 +84,7 @@ export default function Comments({ productId }) {
                         value={commentValue}
                         onChange={handleCommentChange}
                     />
-                    <button type="submit">Submit</button>
+                    <button type="submit" style={{ width: '30%', margin: '10px' }}>Submit</button>
                 </form>
             </div>
             <h1>Comments:-</h1>
@@ -91,7 +92,10 @@ export default function Comments({ productId }) {
                 {comments.map((comment) => (
                     <div key={comment.id} className="comment">
                         <h3>{comment.comment}</h3>
-                        <h6 style={{ backgroundColor: 'lightgray' }}>Commented By:- {comment.username} at {new Date(comment.datetime).toLocaleString('en-US', { date: 'short', time: 'short' })}</h6>
+                        <h6 style={{ backgroundColor: 'lightgray' }}>
+                            Commented By:- {comment.Useremail.split('@')[0]} {/* Remove @gmail.com */}
+                            at {new Date(comment.datetime).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}
+                        </h6>
                         <hr />
                     </div>
                 ))}

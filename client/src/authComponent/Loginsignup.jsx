@@ -1,10 +1,10 @@
+import { FaRegEye,FaRegEyeSlash } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
-import './Loginsignup.css'; // Assuming you place your styles in this CSS file
-import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router-dom';
-import { FaRegEye,FaRegEyeSlash } from "react-icons/fa";
+import './Loginsignup.css';
+import axios from 'axios';
 
 export default function Loginsignup(props) {
     const showlogin = props.showlogin;

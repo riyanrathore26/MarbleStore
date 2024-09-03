@@ -9,7 +9,6 @@ function Navbar() {
 
     const activeHamburger = () => {
         setMenuOpen(!menuOpen); // Corrected assignment
-        console.log('hamburger')
     }
     const navigate = useNavigate();
 

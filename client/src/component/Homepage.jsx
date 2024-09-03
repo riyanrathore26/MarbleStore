@@ -52,7 +52,7 @@ function Homepage() {
               key={index}
               style={{
                 display: index === currentIndex ? 'block' : 'none',
-                transition: 'opacity 0.5s ease-in-out',
+                transition: 'opacity 1.0s ease-in-out',
                 width: '100%',
               }}
             >
