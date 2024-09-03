@@ -10,7 +10,11 @@ const CommentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  username: {
+  Useremail: {
+    type: String,
+    required: true,
+  },
+  Username: {
     type: String,
     required: true,
   },

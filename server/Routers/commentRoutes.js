@@ -5,13 +5,14 @@ const router = express.Router();
 
 router.post('/addcomment', async (req, res) => {
   try {
-    const { productId, comment, username } = req.body;
+    const { productId, comment, Useremail,Username } = req.body;
     const datetime = new Date();
 
     const newComment = new CommentModel({
       productId,
       comment,
-      username,
+      Useremail,
+      Username,
       datetime,
     });
 
