@@ -174,14 +174,13 @@ const removebg = async (imgUrl, name, index) => {
     const newImages = editingProduct.images.filter((_, i) => i !== index);
     setEditingProduct({ ...editingProduct, images: newImages });
   };
-
   return (
     <div>
       <ToastContainer />
-      <h1>Products</h1>
-      <div className="product-list">
+      <h1 className="text-3xl font-bold mb-6">Products</h1>
+      <div className="product-list flex flex-wrap gap-5 p-5">
         {products.map((product) => (
-          <div key={product._id} className="product-item">
+          <div key={product._id} className="product-item bg-gray-100 border border-gray-300 rounded-lg p-5 w-full">
             {editingProduct && editingProduct._id === product._id ? (
               <div className="product-edit-form">
                 <input
@@ -190,6 +189,7 @@ const removebg = async (imgUrl, name, index) => {
                   value={editingProduct.name}
                   onChange={handleChange}
                   placeholder="Product Name"
+                  className="block w-full my-3 p-3 border border-gray-300 rounded-md"
                 />
                 <input
                   type="text"
@@ -197,6 +197,7 @@ const removebg = async (imgUrl, name, index) => {
                   value={editingProduct.price}
                   onChange={handleChange}
                   placeholder="Product Price"
+                  className="block w-full my-3 p-3 border border-gray-300 rounded-md"
                 />
                 <div className="selected-tags">
                   <input
@@ -204,11 +205,12 @@ const removebg = async (imgUrl, name, index) => {
                     id="tags"
                     value={product.tags}
                     onChange={(e) => setTags(e.target.value)}
+                    className="block w-full my-3 p-3 border border-gray-300 rounded-md"
                   />
                   {selectedTags.map((tag) => (
                     <span
                       key={tag}
-                      className="tag selected"
+                      className="tag selected bg-blue-500 text-white px-2 py-1 rounded-lg inline-block mr-2 mb-2 cursor-pointer"
                       onClick={() => handleTagRemove(tag)}
                     >
                       {tag} &times;
@@ -220,83 +222,111 @@ const removebg = async (imgUrl, name, index) => {
                   value={editingProduct.description}
                   onChange={handleChange}
                   placeholder="Product Description"
+                  className="block w-full my-3 p-3 border border-gray-300 rounded-md"
                 />
-                <div className="categories">
+                <div className="categories flex gap-2 flex-wrap">
                   {Object.keys(availableTags).map((category) => (
                     <span
                       key={category}
-                      className="category tag"
+                      className="category tag bg-gray-200 text-gray-700 px-3 py-1 rounded-lg cursor-pointer"
                       onClick={() => handleCategoryClick(category)}
                     >
                       {category}
                     </span>
                   ))}
                 </div>
-                <div className="tag-suggestions">
+                <div className="tag-suggestions flex flex-wrap gap-2 my-3">
                   {currentTags.map((tag) => (
                     <span
                       key={tag}
-                      className={`tag ${selectedTags.includes(tag) ? 'selected' : ''}`}
+                      className={`tag px-3 py-1 rounded-lg cursor-pointer ${
+                        selectedTags.includes(tag) ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+                      }`}
                       onClick={() => handleTagClick(tag)}
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
-
-                <div className="image-edit-section">
+  
+                <div className="image-edit-section flex flex-col gap-4">
                   {editingProduct.images.map((image, index) => (
-                    <div key={index} className="image-edit-item">
+                    <div key={index} className="image-edit-item flex items-center gap-4">
                       <input
                         type="text"
                         value={image}
                         onChange={(e) => handleImageChange(index, e.target.value)}
                         placeholder={`Image URL ${index + 1}`}
+                        className="flex-1 border border-gray-300 p-3 rounded-md"
                       />
-                      <img src={image} alt="" style={{ width: '30px', height: '30px',position:'absolute',marginLeft:'60pc' }} />
+                      <img src={image} alt="" className="w-8 h-8" />
                       <FaTrashAlt
                         onClick={() => handleRemoveImage(index)}
-                        style={{ cursor: 'pointer', marginLeft: '10px' }}
+                        className="cursor-pointer text-red-600"
                       />
-                      <button onClick={() => removebg(image,editingProduct.name,index+1)}>removebg</button>
+                      <button className="bg-red-500 text-white py-1 px-3 rounded" onClick={() => removebg(image, editingProduct.name, index + 1)}>removebg</button>
                     </div>
                   ))}
                   {editingProduct.images.length > 0 && editingProduct.images[editingProduct.images.length - 1] === '' && (
                     <input
                       type="file"
                       onChange={(e) => handleImageUpload(e, editingProduct.images.length - 1)}
+                      className="block w-full"
                     />
                   )}
                   {editingProduct.images.length < 5 && (
-                    <button onClick={handleAddImage}>Add Another Image</button>
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={handleAddImage}>
+                      Add Another Image
+                    </button>
                   )}
-                  <br />
                 </div>
-                <div className="button-group">
-                  <button onClick={handleSaveChanges}>Save Changes</button>
-                  <button onClick={() => setEditingProduct(null)}>Cancel</button>
+  
+                <div className="button-group flex gap-4 my-4">
+                  <button
+                    onClick={handleSaveChanges}
+                    className="bg-green-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={() => setEditingProduct(null)}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="product-details">
-                <div className="images-container">
+                <div className="images-container flex flex-wrap gap-2">
                   {product.images.map((image, index) => (
-                    <img key={index} src={image} alt={`${product.name} ${index + 1}`} />
+                    <img key={index} src={image} alt={`${product.name} ${index + 1}`} className="w-24 h-24 border border-gray-300 rounded-md" />
                   ))}
                 </div>
-                <h2>{product.name}</h2>
-                <p>{product.price}</p>
-                <p>{product.description}</p>
-                <div className="button-group">
-                  <button className="button button-edit" onClick={() => handleEditProduct(product)}>Edit</button>
-                  <button className="button button-delete" onClick={() => handleDeleteProduct(product._id)}>Delete</button>
+                <h2 className="text-2xl font-semibold my-2">{product.name}</h2>
+                <p className="text-lg my-1">{product.price}</p>
+                <p className="text-gray-600 my-1">{product.description}</p>
+                <div className="button-group flex gap-4 mt-4">
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                    onClick={() => handleEditProduct(product)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-md"
+                    onClick={() => handleDeleteProduct(product._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             )}
           </div>
         ))}
       </div>
-      <ToastContainer /> {/* Add ToastContainer at the bottom */}
+      <ToastContainer />
     </div>
   );
+  
 }
