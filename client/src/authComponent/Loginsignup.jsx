@@ -5,6 +5,8 @@ import { BASE_URL } from '../config';
 import Modal from 'react-modal';
 import './Loginsignup.css';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { inout } from '../slices/authSlice'
 
 export default function Loginsignup(props) {
     const showlogin = props.showlogin;
@@ -15,6 +17,7 @@ export default function Loginsignup(props) {
     const [isLogin, setIsLogin] = useState(showlogin);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setIsLogin(showlogin);
@@ -39,7 +42,10 @@ export default function Loginsignup(props) {
             const response = await axios.post(`${BASE_URL}/api/auth/login`, form);
             console.log(response.data);
             if (response) {
-                // navigate to the home page or another page after successful login
+                localStorage.setItem('email',form.email);
+                // const loggedIn = useSelector((state) => state.auth.isLoggedIn);
+                dispatch(inout(true)); // Toggle between true/false
+
                 navigate('/');
             }
         } catch (error) {

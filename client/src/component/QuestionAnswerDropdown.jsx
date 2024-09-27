@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
-import { Link, NavLink } from 'react-router-dom'
-
+import { Link, NavLink } from 'react-router-dom';
 
 function QuestionAnswerDropdown() {
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(null);
@@ -40,25 +39,38 @@ function QuestionAnswerDropdown() {
 
   return (
     <>
-      <div className="question-answer-dropdown">
-        <div className="question-grid">
+      <div className="w-full max-w-4xl mx-auto p-5 font-sans">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {questions.map((questionData, index) => (
-            <div key={questionData.question} className="question-answer-item">
-              <button key={questionData.question} onClick={() => handleQuestionClick(index)}>
-                <span>Q.</span>{questionData.question}
+            <div
+              key={questionData.question}
+              className="bg-gray-100 border border-gray-300 rounded-lg p-4 transition-colors duration-300 ease-in-out"
+            >
+              <button
+                key={questionData.question}
+                onClick={() => handleQuestionClick(index)}
+                className="w-full text-left flex items-center text-lg"
+              >
+                <span className="font-bold text-pink-600 mr-2">Q.</span>
+                {questionData.question}
               </button>
               {selectedQuestionIndex === index && (
-                <p className={`answer-list ${selectedQuestionIndex === index ? 'show-answer' : ''}`}>
+                <div className="mt-2 pt-2 border-t border-gray-300">
                   {questions[selectedQuestionIndex].answers.map((answer) => (
-                    <p key={answer}>{answer}</p>
+                    <p key={answer} className="mt-1">
+                      {answer}
+                    </p>
                   ))}
-                </p>
+                </div>
               )}
             </div>
           ))}
         </div>
-        <h3 className='homeh1'><NavLink to='/blog'>Browse about section for more details</NavLink></h3>
-        {/*  */}
+        <h3 className="text-center mt-6 text-pink-600 text-lg">
+          <NavLink to="/blog" className="hover:underline">
+            Browse about section for more details
+          </NavLink>
+        </h3>
       </div>
     </>
   );

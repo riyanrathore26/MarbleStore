@@ -38,14 +38,13 @@ const SearchBar = () => {
   };
 
   const handleCloseResults = () => {
-    alert("ji")
     setSearchResults([]);
   };
 
   return (
-    <div className="search-bar-container">
-      <div className="search-bar">
-        <SearchIcon className="search-icon" />
+    <div className="relative w-full max-w-xl mx-auto">
+      <div className="flex items-center bg-white rounded-full py-2 px-4 shadow-md">
+        <SearchIcon className="text-gray-400" />
         <TextField
           value={searchTerm}
           onChange={handleInputChange}
@@ -53,6 +52,7 @@ const SearchBar = () => {
           variant="standard"
           fullWidth
           InputProps={{ disableUnderline: true }}
+          className="ml-2"
         />
         <IconButton onClick={handleSearch}>
           <SearchIcon />
@@ -65,15 +65,15 @@ const SearchBar = () => {
         </IconButton>
       </div>
       {searchResults.length > 0 && (
-        <div className="search-results">
-          <IconButton onClick={handleCloseResults} className="close-results">
+        <div className="absolute top-12 left-0 right-0 z-50 bg-white rounded-xl shadow-md p-4 max-h-80 overflow-y-auto">
+          <IconButton onClick={handleCloseResults} className="float-right">
             <CloseIcon />
           </IconButton>
-          <List className="results-list">
+          <List>
             {searchResults.map((result, index) => (
-              <div className="searchResult" onClick={() => nextPage(result._id)} key={index}>
+              <div className="flex items-center cursor-pointer" onClick={() => nextPage(result._id)} key={index}>
                 <ListItem button>
-                  <img src={result.images[0]} alt="" className="result-image" />
+                  <img src={result.images[0]} alt="" className="w-12 h-12 mr-2 rounded-md" />
                   <ListItemText primary={result.name} secondary={result.description} />
                 </ListItem>
               </div>
