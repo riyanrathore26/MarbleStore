@@ -66,7 +66,6 @@ router.post('/verify', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log(email,password);
   const params = {
     AuthFlow: 'USER_PASSWORD_AUTH',
     ClientId: process.env.AWS_CLIENT_ID,
