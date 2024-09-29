@@ -11,10 +11,16 @@ AWS.config.update({
 
 
 router.post('/signup', async (req, res) => {
-  const { username, email, password, phonenumber } = req.body;
+  const { username, email, password, phonenumber, gender } = req.body;
+  let mobilenumber = phonenumber;
 
-  console.log('Signup Request:', { username, email, password, phonenumber });
+  // Remove all spaces from the phone number
+  mobilenumber = mobilenumber.replace(/\s+/g, '');
 
+  // Add +91 if it doesn't already start with it
+  if (!mobilenumber.startsWith('+91')) {
+    mobilenumber = `+91${mobilenumber}`;
+  }
   const params = {
     ClientId: process.env.AWS_CLIENT_ID || 'jr9vl0cjsv7h8liq5tt43r57o',
     Username: email,
@@ -27,12 +33,12 @@ router.post('/signup', async (req, res) => {
   };
 
   const newUser = new User({
-    username,
-    PhoneNumber: phonenumber,
-    password,
+    username: username,
+    phonenumber: mobilenumber,
     email,
+    password,
+    gender,
   });
-
   try {
     const data = await cognito.signUp(params).promise();
     console.log(data);

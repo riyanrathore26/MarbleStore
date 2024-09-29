@@ -15,8 +15,8 @@ const uploadToS3 = (fileData) => {
   return new Promise((resolve, reject) => {
     const params = {
       Bucket: bucketName,
-      Key: `Marbles_img/${fileData.originalname}`,
-      Body: fileData.buffer, // Extract the buffer from the file object
+      Key: `Marbles_img/${fileData.name}`,
+      Body: fileData.buffer,
     };
     S3.upload(params, (err, data) => {
       if (err) {

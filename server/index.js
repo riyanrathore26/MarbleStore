@@ -7,9 +7,10 @@ const SearchRoutes = require('./Routers/SearchRoutes');
 const commentRoutes = require('./Routers/commentRoutes');
 const authRoutes = require('./Routers/authRoutes');
 const webdata = require('./Routers/webdata');
+const userinfo = require('./Routers/user.js');
 require('dotenv').config();
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -24,6 +25,8 @@ app.use('/api/addtocart', authRoutes);
 app.use('/api/updateProduct', productRoutes);
 app.use('/api/deleteProduct', productRoutes);
 app.use('/api',SearchRoutes);
+app.use('/api',userinfo)
+app.use('/api/profile',userinfo);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
