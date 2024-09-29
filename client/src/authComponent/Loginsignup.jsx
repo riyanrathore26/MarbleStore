@@ -1,4 +1,4 @@
-import { FaRegEye,FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
@@ -10,7 +10,7 @@ import { inout } from '../slices/authSlice'
 
 export default function Loginsignup(props) {
     const showlogin = props.showlogin;
-    const [form, setForm] = useState({ username: '', email: '', password: '', phonenumber: '' });
+    const [form, setForm] = useState({ username: '', email: '', password: '', phonenumber: '',gender: '' });
     const [verificationCode, setVerificationCode] = useState('');
     const [isVerifying, setIsVerifying] = useState(false);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -42,7 +42,7 @@ export default function Loginsignup(props) {
             const response = await axios.post(`${BASE_URL}/api/auth/login`, form);
             console.log(response.data);
             if (response) {
-                localStorage.setItem('email',form.email);
+                localStorage.setItem('email', form.email);
                 // const loggedIn = useSelector((state) => state.auth.isLoggedIn);
                 dispatch(inout(true)); // Toggle between true/false
 
@@ -92,7 +92,7 @@ export default function Loginsignup(props) {
             alert('Verification failed. Please check the code and try again.');
         }
     };
-    
+
     // Toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -163,6 +163,19 @@ export default function Loginsignup(props) {
                                 placeholder="Enter your phone number"
                                 required
                             />
+                            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                                Gender
+                            </label>
+                            <select
+                                name="gender"
+                                onChange={handleInputChange}
+                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
                     )}
                     <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
@@ -171,8 +184,8 @@ export default function Loginsignup(props) {
 
             {/* Verification Modal (if needed) */}
             {isVerifying && (
-                <Modal 
-                    isOpen={modalIsOpen} 
+                <Modal
+                    isOpen={modalIsOpen}
                     onRequestClose={() => setModalIsOpen(false)}
                     className="modal"
                     overlayClassName="overlay"

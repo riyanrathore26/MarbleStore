@@ -14,6 +14,7 @@ import {
 import Productpage from './component/Productpage';
 import Footer from './component/Footer';
 import Loginsignup from './authComponent/Loginsignup';
+import Profile from './component/profile';
 
 
 function App() {
@@ -37,6 +38,10 @@ function App() {
     {
       path: "/Product",
       element: <><Navbar /><Productpage showsomething={true} /></>, // Show all products on this page
+    },
+    {
+      path: "/profile",
+      element:<><Navbar /><Profile/></>
     },    
     {
       path: "/Footer",
